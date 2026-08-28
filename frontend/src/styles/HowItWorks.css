@@ -1,0 +1,93 @@
+.how-it-works {
+padding: 70px 30px;
+background-color: var(--white);
+}
+
+.how-container {
+max-width: var(--container-width);
+margin: 0 auto;
+}
+
+.how-header {
+text-align: center;
+margin-bottom: 45px;
+}
+
+.how-header h2 {
+margin-bottom: 10px;
+
+color: var(--primary-blue);
+font-size: 32px;
+
+}
+
+.how-header p {
+color: #666666;
+font-size: 16px;
+}
+
+.how-steps {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 30px;
+}
+
+.how-step {
+padding: 30px;
+
+text-align: center;
+
+border: 1px solid var(--border-gray);
+border-radius: 8px;
+
+background-color: var(--light-gray);
+
+}
+
+.step-number {
+width: 55px;
+height: 55px;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+margin: 0 auto 20px;
+
+background-color: var(--primary-blue);
+color: var(--white);
+
+border-radius: 50%;
+
+font-size: 16px;
+font-weight: 700;
+
+}
+
+.how-step h3 {
+margin-bottom: 10px;
+
+color: var(--primary-blue);
+font-size: 20px;
+
+}
+
+.how-step p {
+color: #666666;
+font-size: 15px;
+line-height: 1.6;
+}
+
+/* Responsive */
+
+@media (max-width: 700px) {
+
+.how-steps {
+    grid-template-columns: 1fr;
+}
+
+.how-it-works {
+    padding: 50px 20px;
+}
+
+}

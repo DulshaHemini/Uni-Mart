@@ -1,0 +1,96 @@
+.seller-cta {
+padding: 70px 30px;
+
+background-color: var(--primary-blue);
+
+}
+
+.seller-cta-content {
+max-width: var(--container-width);
+margin: 0 auto;
+
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+gap: 40px;
+
+}
+
+.seller-cta-text {
+max-width: 650px;
+}
+
+.seller-cta-label {
+margin-bottom: 10px;
+
+color: var(--primary-orange);
+
+font-size: 14px;
+font-weight: 700;
+letter-spacing: 1px;
+
+}
+
+.seller-cta h2 {
+margin-bottom: 15px;
+
+color: var(--white);
+
+font-size: 34px;
+
+}
+
+.seller-cta-text > p:last-child {
+color: #E5E7EB;
+
+font-size: 16px;
+line-height: 1.6;
+
+}
+
+.seller-cta-button {
+flex-shrink: 0;
+
+padding: 14px 28px;
+
+background-color: var(--primary-orange);
+color: var(--white);
+
+border-radius: 6px;
+
+font-size: 16px;
+font-weight: 700;
+
+transition: 0.2s ease;
+
+}
+
+.seller-cta-button:hover {
+background-color: var(--white);
+color: var(--primary-blue);
+}
+
+/* Responsive */
+
+@media (max-width: 700px) {
+
+.seller-cta {
+    padding: 50px 20px;
+}
+
+.seller-cta-content {
+    flex-direction: column;
+    text-align: center;
+}
+
+.seller-cta h2 {
+    font-size: 28px;
+}
+
+.seller-cta-button {
+    width: 100%;
+    text-align: center;
+}
+
+}

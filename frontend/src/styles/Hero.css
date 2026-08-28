@@ -1,0 +1,114 @@
+.hero {
+    min-height: 520px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 70px 30px;
+
+    background-color: var(--light-gray);
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 800px;
+
+    text-align: center;
+}
+
+.hero-label {
+    margin-bottom: 18px;
+
+    color: var(--primary-orange);
+
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.hero h1 {
+    margin-bottom: 10px;
+
+    color: var(--primary-blue);
+
+    font-size: 52px;
+    font-weight: 800;
+}
+
+.hero h2 {
+    margin-bottom: 20px;
+
+    color: var(--primary-orange);
+
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.hero-description {
+    max-width: 600px;
+
+    margin: 0 auto 30px;
+
+    color: #555555;
+
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.hero-button {
+    display: inline-block;
+
+    padding: 14px 28px;
+
+    background-color: var(--primary-blue);
+    color: var(--white);
+
+    border-radius: 6px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    transition: 0.2s ease;
+
+    
+}
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.hero-button:hover {
+    background-color: var(--primary-orange);
+}
+
+.hero-sell-button {
+    background-color: var(--primary-blue);
+}
+
+.hero-sell-button:hover {
+    background-color: var(--primary-orange);
+}
+/* Responsive */
+
+@media (max-width: 600px) {
+
+    .hero {
+        min-height: 450px;
+        padding: 50px 20px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .hero h2 {
+        font-size: 25px;
+    }
+
+    .hero-description {
+        font-size: 16px;
+    }
+}
