@@ -7,7 +7,7 @@
 
     padding: 70px 30px;
 
-    background-color: var(--light-gray);
+    background-color: var(--primary-blue);
 }
 
 .hero-content {
@@ -17,24 +17,33 @@
     text-align: center;
 }
 
+
+/* Hero Label */
+
 .hero-label {
     margin-bottom: 18px;
 
-    color: var(--primary-orange);
+    color: #ffffff;
 
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 1.5px;
 }
 
+
+/* Main Heading */
+
 .hero h1 {
     margin-bottom: 10px;
 
-    color: var(--primary-blue);
+    color: #ffffff;
 
     font-size: 52px;
     font-weight: 800;
 }
+
+
+/* Secondary Heading */
 
 .hero h2 {
     margin-bottom: 20px;
@@ -45,58 +54,93 @@
     font-weight: 700;
 }
 
+
+/* Description */
+
 .hero-description {
     max-width: 600px;
 
     margin: 0 auto 30px;
 
-    color: #555555;
+    color: #ffffff;
 
     font-size: 18px;
     line-height: 1.6;
+
+    opacity: 0.9;
 }
+
+
+/* Buttons */
+
+.hero-buttons {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 25px;
+}
+
 
 .hero-button {
     display: inline-block;
 
     padding: 14px 28px;
 
-    background-color: var(--primary-blue);
-    color: var(--white);
+    background-color: var(--primary-orange);
+
+    color: #ffffff;
+
+    border: 2px solid var(--primary-orange);
 
     border-radius: 6px;
 
     font-size: 16px;
     font-weight: 700;
 
-    transition: 0.2s ease;
+    text-decoration: none;
 
-    
+    transition: 0.2s ease;
 }
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-}
+
 
 .hero-button:hover {
-    background-color: var(--primary-orange);
+    background-color: #ffffff;
+
+    color: var(--primary-blue);
+
+    border-color: #ffffff;
 }
+
+
+/* Sell Button */
 
 .hero-sell-button {
-    background-color: var(--primary-blue);
+    background-color: transparent;
+
+    color: #ffffff;
+
+    border: 2px solid #ffffff;
 }
 
+
 .hero-sell-button:hover {
-    background-color: var(--primary-orange);
+    background-color: #ffffff;
+
+    color: var(--primary-blue);
+
+    border-color: #ffffff;
 }
+
+
 /* Responsive */
 
 @media (max-width: 600px) {
 
     .hero {
         min-height: 450px;
+
         padding: 50px 20px;
     }
 
@@ -110,5 +154,21 @@
 
     .hero-description {
         font-size: 16px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .hero-button {
+        width: 100%;
+
+        max-width: 250px;
+
+        box-sizing: border-box;
+
+        text-align: center;
     }
 }

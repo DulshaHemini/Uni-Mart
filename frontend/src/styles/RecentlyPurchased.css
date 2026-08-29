@@ -1,0 +1,173 @@
+/* =========================
+   RECENTLY PURCHASED
+========================= */
+
+.recently-purchased {
+    padding: 70px 30px;
+
+    background-color: #f7f8fa;
+}
+
+
+.recently-purchased-container {
+    max-width: 1250px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.recently-purchased-header {
+    margin-bottom: 30px;
+}
+
+
+.recently-purchased-header h2 {
+    margin-bottom: 8px;
+
+    color: var(--primary-blue);
+
+    font-size: 26px;
+    font-weight: 700;
+}
+
+
+.recently-purchased-header p {
+    color: #777777;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   PRODUCT GRID
+========================= */
+
+.recently-purchased-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 20px;
+}
+
+
+/* =========================
+   PRODUCT CARD
+========================= */
+
+.recently-purchased-card {
+    overflow: hidden;
+
+    background-color: var(--white);
+
+    border: 1px solid var(--border-gray);
+
+    border-radius: 9px;
+
+    transition: 0.2s ease;
+}
+
+
+.recently-purchased-card:hover {
+    transform: translateY(-3px);
+
+    border-color: var(--primary-orange);
+
+    box-shadow:
+        0 7px 20px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+.recently-purchased-image {
+    height: 175px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background-color: var(--light-gray);
+
+    font-size: 62px;
+}
+
+
+/* =========================
+   INFORMATION
+========================= */
+
+.recently-purchased-info {
+    padding: 18px;
+}
+
+
+.recently-purchased-info h3 {
+    margin-bottom: 9px;
+
+    color: var(--black);
+
+    font-size: 14px;
+}
+
+
+.recently-purchased-price {
+    margin-bottom: 10px;
+
+    color: var(--primary-blue);
+
+    font-size: 17px;
+
+    font-weight: 700;
+}
+
+
+.purchased-time {
+    color: #888888;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1000px) {
+
+    .recently-purchased-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .recently-purchased {
+        padding: 50px 20px;
+    }
+
+
+    .recently-purchased-header h2 {
+        font-size: 22px;
+    }
+
+
+    .recently-purchased-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

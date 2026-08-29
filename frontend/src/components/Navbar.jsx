@@ -5,16 +5,6 @@ import "../styles/Navbar.css";
 export default function Navbar() {
 
     const [menuOpen, setMenuOpen] = useState(false);
-    const [profileOpen, setProfileOpen] = useState(false);
-
-    // Temporary login state
-    // Later this will come from real JWT authentication
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-
-    const handleLogout = () => {
-        setIsLoggedIn(false);
-        setProfileOpen(false);
-    };
 
     return (
         <nav className="navbar">
@@ -44,6 +34,8 @@ export default function Navbar() {
 
             <div className="desktop-actions">
 
+                {/* Search */}
+
                 <div className="navbar-search">
 
                     <span>🔍</span>
@@ -56,69 +48,24 @@ export default function Navbar() {
                 </div>
 
 
-                <Link to="/cart">
-                    🛒 Cart
+                {/* Login */}
+
+                <Link
+                    to="/login"
+                    className="nav-auth-button"
+                >
+                    Login
                 </Link>
 
 
-                {/* Login OR Profile */}
+                {/* Register */}
 
-                {!isLoggedIn ? (
-
-                    <Link to="/login">
-                        👤 Login
-                    </Link>
-
-                ) : (
-
-                    <div className="profile-wrapper">
-
-                        <button
-                            className="profile-button"
-                            onClick={() => setProfileOpen(!profileOpen)}
-                        >
-                            👤 Profile ▾
-                        </button>
-
-
-                        {profileOpen && (
-
-                            <div className="profile-dropdown">
-
-                                <Link
-                                    to="/profile"
-                                    onClick={() => setProfileOpen(false)}
-                                >
-                                    👤 My Profile
-                                </Link>
-
-                                <Link
-                                    to="/orders"
-                                    onClick={() => setProfileOpen(false)}
-                                >
-                                    📦 My Orders
-                                </Link>
-
-                                <Link
-                                    to="/settings"
-                                    onClick={() => setProfileOpen(false)}
-                                >
-                                    ⚙ Account
-                                </Link>
-
-                                <button
-                                    onClick={handleLogout}
-                                >
-                                    🚪 Logout
-                                </button>
-
-                            </div>
-
-                        )}
-
-                    </div>
-
-                )}
+                <Link
+                    to="/register"
+                    className="nav-auth-button"
+                >
+                    Register
+                </Link>
 
             </div>
 
@@ -176,66 +123,26 @@ export default function Navbar() {
                     </div>
 
 
-                    <Link
-                        to="/cart"
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        🛒 Cart
-                    </Link>
-
-
-                                
-                {/* Mobile Login OR Profile */}
-
-                {!isLoggedIn ? (
+                    {/* Mobile Login */}
 
                     <Link
                         to="/login"
+                        className="mobile-auth-button"
                         onClick={() => setMenuOpen(false)}
                     >
-                        👤 Login
+                        Login
                     </Link>
 
-                ) : (
 
-                    <>
+                    {/* Mobile Register */}
 
-                        <Link
-                            to="/profile"
-                            onClick={() => setMenuOpen(false)}
-                        >
-                            👤 Profile
-                        </Link>
-
-                        <Link
-                            to="/orders"
-                            onClick={() => setMenuOpen(false)}
-                        >
-                            📦 My Orders
-                        </Link>
-
-                        <Link
-                            to="/settings"
-                            onClick={() => setMenuOpen(false)}
-                        >
-                            ⚙ Account
-                        </Link>
-
-                        <button
-                            className="mobile-logout"
-                            onClick={() => {
-                                handleLogout();
-                                setMenuOpen(false);
-                            }}
-                        >
-                            🚪 Logout
-                        </button>
-
-                    </>
-
-                )}
-
-
+                    <Link
+                        to="/register"
+                        className="mobile-auth-button"
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        Register
+                    </Link>
 
                 </div>
 
