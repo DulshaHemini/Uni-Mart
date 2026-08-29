@@ -1,0 +1,126 @@
+/* =========================
+   NOTIFICATION OVERLAY
+========================= */
+
+.notification-overlay {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(0, 0, 0, 0.25);
+
+    z-index: 9999;
+
+    animation: notificationFadeIn 0.25s ease;
+}
+
+
+/* =========================
+   NOTIFICATION BOX
+========================= */
+
+.notification-box {
+    width: 90%;
+    max-width: 380px;
+
+    padding: 30px 25px;
+
+    background-color: var(--white);
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+
+    animation: notificationScaleIn 0.25s ease;
+}
+
+
+/* =========================
+   ICON
+========================= */
+
+.notification-icon {
+    font-size: 42px;
+
+    margin-bottom: 12px;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.notification-box p {
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   SUCCESS
+========================= */
+
+.notification-overlay.success .notification-box {
+    border-top: 5px solid #16a34a;
+}
+
+.notification-overlay.success p {
+    color: #15803d;
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.notification-overlay.error .notification-box {
+    border-top: 5px solid #dc2626;
+}
+
+.notification-overlay.error p {
+    color: #b91c1c;
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes notificationFadeIn {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+@keyframes notificationScaleIn {
+
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+}
