@@ -124,3 +124,51 @@
     }
 
 }
+
+/* =========================
+   CONFIRMATION BUTTONS
+========================= */
+
+.notification-actions {
+    display: flex;
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.notification-cancel,
+.notification-confirm {
+    padding: 10px 20px;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.notification-cancel {
+    background-color: var(--white);
+    color: var(--black);
+
+    border: 1px solid var(--border-gray);
+}
+
+.notification-cancel:hover {
+    background-color: var(--light-gray);
+}
+
+.notification-confirm {
+    background-color: #dc2626;
+    color: var(--white);
+
+    border: none;
+}
+
+.notification-confirm:hover {
+    background-color: #b91c1c;
+}

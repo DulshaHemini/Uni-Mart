@@ -5,6 +5,9 @@ import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
 import Products from "./pages/Product/Products.jsx";
 import ProductDetails from "./components/Product/ProductDetails.jsx";
+import ProtectedRoute from "./components/Product/ProtectedRoute.jsx";
+
+import Cart from "./pages/Cart/Cart.jsx";
 
 function App() {
     return (
@@ -34,6 +37,15 @@ function App() {
                 <Route
                     path="/products/:id"
                     element={<ProductDetails />}
+                />
+
+                <Route
+                    path="/cart"
+                    element={
+                        <ProtectedRoute allowedRoles={["buyer"]}>
+                            <Cart />
+                        </ProtectedRoute>
+                    }
                 />
 
             </Routes>

@@ -7,6 +7,7 @@ import { connectDB } from "./config/db.js";
 import categoryRouter from "./routes/categoryRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productRoutes.js";
+import cartRouter from "./routes/cartRoutes.js";
 
 
 
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/products", productRouter);
+app.use("/api/cart", cartRouter);
 
 
 
