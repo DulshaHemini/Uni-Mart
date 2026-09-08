@@ -2,9 +2,9 @@ import { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 
-import "../styles/Login/Login.css";
+import "../../styles/Login/Login.css"
 
-import Notification from "../components/Notification.jsx";
+import Notification from "../../components/Notification.jsx";
 
 export default function Login() {
 

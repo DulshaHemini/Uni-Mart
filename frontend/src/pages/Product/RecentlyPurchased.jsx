@@ -1,4 +1,4 @@
-import "../styles/RecentlyPurchased.css";
+import "../../styles/Products/RecentlyPurchased.css";
 
 export default function RecentlyPurchased() {
 
