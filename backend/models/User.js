@@ -33,6 +33,18 @@ const userSchema = new mongoose.Schema(
             trim: true
         },
 
+        shipping_address: {
+            type: String,
+            default: "",
+            trim: true
+        },
+
+        billing_address: {
+            type: String,
+            default: "",
+            trim: true
+        },
+
         role: {
             type: String,
             enum: ["buyer", "seller", "admin"],

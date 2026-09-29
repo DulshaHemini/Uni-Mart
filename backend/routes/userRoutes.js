@@ -2,7 +2,10 @@ import express from "express";
 
 import {
     createUser,
-    loginUser
+    loginUser,
+    getUserProfile,
+    updateUserProfile,
+    changePassword
 } from "../controllers/userController.js";
 
 import {
@@ -28,18 +31,19 @@ userRouter.post(
 userRouter.get(
     "/profile",
     authMiddleware,
-    (req, res) => {
-
-        res.json({
-
-            message: "Profile accessed successfully",
-
-            user: req.user
-
-        });
-
-    }
+    getUserProfile
 );
 
+userRouter.put(
+    "/profile",
+    authMiddleware,
+    updateUserProfile
+);
+
+userRouter.put(
+    "/change-password",
+    authMiddleware,
+    changePassword
+);
 
 export default userRouter;

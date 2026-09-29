@@ -111,8 +111,7 @@ export async function loginUser(req, res) {
 
             return res.status(404).json({
 
-                message: "User not found"
-
+                message: "Invalid email or password"
             });
 
         }
@@ -142,7 +141,7 @@ export async function loginUser(req, res) {
 
             return res.status(401).json({
 
-                message: "Incorrect password"
+                message: "Invalid email or password"
 
             });
 
@@ -216,4 +215,173 @@ export async function loginUser(req, res) {
 
     }
 
+}
+
+// ================================
+// Get User Profile
+// ================================
+
+export async function getUserProfile(req, res) {
+    try {
+        const user = await User.findById(
+            req.user.user_id
+        ).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User profile not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Profile retrieved successfully",
+            user
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: "Failed to retrieve profile"
+        });
+    }
+}
+
+// ================================
+// Update User Profile
+// ================================
+
+export async function updateUserProfile(req, res) {
+    try {
+        const {
+            first_name,
+            last_name,
+            phone_number,
+            shipping_address,
+            billing_address
+        } = req.body;
+
+        const user = await User.findById(
+            req.user.user_id
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User profile not found"
+            });
+        }
+
+        if (first_name !== undefined) {
+            user.first_name = first_name.trim();
+        }
+
+        if (last_name !== undefined) {
+            user.last_name = last_name.trim();
+        }
+
+        if (phone_number !== undefined) {
+            user.phone_number = phone_number.trim();
+        }
+
+        if (shipping_address !== undefined) {
+            user.shipping_address = shipping_address.trim();
+        }
+
+        if (billing_address !== undefined) {
+            user.billing_address = billing_address.trim();
+        }
+
+        await user.save();
+
+        const updatedUser = await User.findById(
+            user._id
+        ).select("-password");
+
+        res.status(200).json({
+            message: "Profile updated successfully",
+            user: updatedUser
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: "Failed to update profile"
+        });
+    }
+}
+
+// ================================
+// Change Password
+// ================================
+
+export async function changePassword(req, res) {
+    try {
+        const {
+            current_password,
+            new_password
+        } = req.body;
+
+        if (!current_password || !new_password) {
+            return res.status(400).json({
+                message: "Current password and new password are required"
+            });
+        }
+
+        const user = await User.findById(
+            req.user.user_id
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        const passwordMatch = await bcrypt.compare(
+            current_password,
+            user.password
+        );
+
+        if (!passwordMatch) {
+            return res.status(401).json({
+                message: "Current password is incorrect"
+            });
+        }
+
+        if (new_password.length < 8) {
+            return res.status(400).json({
+                message: "New password must contain at least 8 characters"
+            });
+        }
+
+        const samePassword = await bcrypt.compare(
+            new_password,
+            user.password
+        );
+
+        if (samePassword) {
+            return res.status(400).json({
+                message: "New password must be different from the current password"
+            });
+        }
+
+        user.password = await bcrypt.hash(
+            new_password,
+            10
+        );
+
+        await user.save();
+
+        res.status(200).json({
+            message: "Password changed successfully"
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: "Failed to change password"
+        });
+    }
 }
