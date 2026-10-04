@@ -8,10 +8,9 @@ import categoryRouter from "./routes/categoryRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
-
-
-
-dotenv.config();
+import paymentRouter from "./routes/paymentRoutes.js";
+import orderRouter
+    from "./routes/orderRoutes.js";dotenv.config();
 
 
 const app = express();
@@ -23,6 +22,14 @@ app.use(cors());
 
 app.use(express.json());
 
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+);
+
+app.use("/api/payments", paymentRouter);
+
 
 // Routes
 
@@ -30,6 +37,7 @@ app.use("/api/users", userRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/orders",orderRouter);
 
 
 

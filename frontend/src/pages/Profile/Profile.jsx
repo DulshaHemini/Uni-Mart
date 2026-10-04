@@ -25,37 +25,57 @@ export default function Profile() {
 
     const [profile, setProfile] =
         useState({
+
             first_name: "",
             last_name: "",
             email: "",
             phone_number: "",
+
             shipping_address: "",
+            shipping_city: "",
+            shipping_postal_code: "",
+
             billing_address: "",
+            billing_city: "",
+            billing_postal_code: "",
+
             role: "",
             created_at: ""
+
         });
+
 
     const [originalProfile, setOriginalProfile] =
         useState(null);
 
+
     const [loading, setLoading] =
         useState(true);
+
 
     const [saving, setSaving] =
         useState(false);
 
+
     const [notification, setNotification] =
         useState(null);
 
+
     const [passwordForm, setPasswordForm] =
         useState({
+
             current_password: "",
             new_password: "",
             confirm_password: ""
+
         });
 
-    const [changingPassword, setChangingPassword] =
-        useState(false);
+
+    const [
+        changingPassword,
+        setChangingPassword
+    ] = useState(false);
+
 
 
     // ================================
@@ -72,11 +92,15 @@ export default function Profile() {
             message
         });
 
+
         setTimeout(() => {
+
             setNotification(null);
+
         }, 2000);
 
     };
+
 
 
     // ================================
@@ -89,15 +113,19 @@ export default function Profile() {
 
             try {
 
-                const response = await fetch(
-                    "http://localhost:5000/api/users/profile",
-                    {
-                        headers: {
-                            Authorization:
-                                `Bearer ${token}`
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/users/profile",
+                        {
+                            headers: {
+
+                                Authorization:
+                                    `Bearer ${token}`
+
+                            }
                         }
-                    }
-                );
+                    );
+
 
                 const data =
                     await response.json();
@@ -127,11 +155,26 @@ export default function Profile() {
                     phone_number:
                         data.user.phone_number || "",
 
+
                     shipping_address:
                         data.user.shipping_address || "",
 
+                    shipping_city:
+                        data.user.shipping_city || "",
+
+                    shipping_postal_code:
+                        data.user.shipping_postal_code || "",
+
+
                     billing_address:
                         data.user.billing_address || "",
+
+                    billing_city:
+                        data.user.billing_city || "",
+
+                    billing_postal_code:
+                        data.user.billing_postal_code || "",
+
 
                     role:
                         data.user.role || "",
@@ -144,7 +187,9 @@ export default function Profile() {
 
                 setProfile(profileData);
 
-                setOriginalProfile(profileData);
+                setOriginalProfile(
+                    profileData
+                );
 
 
             } catch (error) {
@@ -153,6 +198,7 @@ export default function Profile() {
                     "error",
                     error.message
                 );
+
 
             } finally {
 
@@ -168,6 +214,7 @@ export default function Profile() {
     }, [token]);
 
 
+
     // ================================
     // START EDIT
     // ================================
@@ -181,6 +228,7 @@ export default function Profile() {
         setIsEditing(true);
 
     };
+
 
 
     // ================================
@@ -200,6 +248,7 @@ export default function Profile() {
         setIsEditing(false);
 
     };
+
 
 
     // ================================
@@ -227,11 +276,14 @@ export default function Profile() {
     };
 
 
+
     // ================================
     // UPDATE PROFILE
     // ================================
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (
+        event
+    ) => {
 
         event.preventDefault();
 
@@ -240,39 +292,59 @@ export default function Profile() {
 
         try {
 
-            const response = await fetch(
-                "http://localhost:5000/api/users/profile",
-                {
-                    method: "PUT",
+            const response =
+                await fetch(
+                    "http://localhost:5000/api/users/profile",
+                    {
 
-                    headers: {
-                        "Content-Type":
-                            "application/json",
+                        method: "PUT",
 
-                        Authorization:
-                            `Bearer ${token}`
-                    },
+                        headers: {
 
-                    body: JSON.stringify({
+                            "Content-Type":
+                                "application/json",
 
-                        first_name:
-                            profile.first_name,
+                            Authorization:
+                                `Bearer ${token}`
 
-                        last_name:
-                            profile.last_name,
+                        },
 
-                        phone_number:
-                            profile.phone_number,
 
-                        shipping_address:
-                            profile.shipping_address,
+                        body: JSON.stringify({
 
-                        billing_address:
-                            profile.billing_address
+                            first_name:
+                                profile.first_name,
 
-                    })
-                }
-            );
+                            last_name:
+                                profile.last_name,
+
+                            phone_number:
+                                profile.phone_number,
+
+
+                            shipping_address:
+                                profile.shipping_address,
+
+                            shipping_city:
+                                profile.shipping_city,
+
+                            shipping_postal_code:
+                                profile.shipping_postal_code,
+
+
+                            billing_address:
+                                profile.billing_address,
+
+                            billing_city:
+                                profile.billing_city,
+
+                            billing_postal_code:
+                                profile.billing_postal_code
+
+                        })
+
+                    }
+                );
 
 
             const data =
@@ -303,11 +375,26 @@ export default function Profile() {
                 phone_number:
                     data.user.phone_number || "",
 
+
                 shipping_address:
                     data.user.shipping_address || "",
 
+                shipping_city:
+                    data.user.shipping_city || "",
+
+                shipping_postal_code:
+                    data.user.shipping_postal_code || "",
+
+
                 billing_address:
                     data.user.billing_address || "",
+
+                billing_city:
+                    data.user.billing_city || "",
+
+                billing_postal_code:
+                    data.user.billing_postal_code || "",
+
 
                 role:
                     data.user.role || "",
@@ -318,14 +405,21 @@ export default function Profile() {
             };
 
 
-            setProfile(updatedProfile);
+            setProfile(
+                updatedProfile
+            );
 
-            setOriginalProfile(updatedProfile);
+
+            setOriginalProfile(
+                updatedProfile
+            );
 
 
             const storedUser =
                 JSON.parse(
-                    localStorage.getItem("user")
+                    localStorage.getItem(
+                        "user"
+                    )
                 ) || {};
 
 
@@ -369,6 +463,7 @@ export default function Profile() {
                 error.message
             );
 
+
         } finally {
 
             setSaving(false);
@@ -378,127 +473,143 @@ export default function Profile() {
     };
 
 
+
     // ================================
     // PASSWORD INPUT CHANGE
     // ================================
 
-    const handlePasswordChange = (event) => {
+    const handlePasswordChange =
+        (event) => {
 
-        const {
-            name,
-            value
-        } = event.target;
+            const {
+                name,
+                value
+            } = event.target;
 
 
-        setPasswordForm(
-            (previousForm) => ({
+            setPasswordForm(
+                (previousForm) => ({
 
-                ...previousForm,
+                    ...previousForm,
 
-                [name]: value
+                    [name]: value
 
-            })
-        );
+                })
+            );
 
-    };
+        };
+
 
 
     // ================================
     // CHANGE PASSWORD
     // ================================
 
-    const handleChangePassword = async (event) => {
+    const handleChangePassword =
+        async (event) => {
 
-        event.preventDefault();
-
-
-        if (
-            passwordForm.new_password !==
-            passwordForm.confirm_password
-        ) {
-
-            showNotification(
-                "error",
-                "New passwords do not match"
-            );
-
-            return;
-
-        }
+            event.preventDefault();
 
 
-        setChangingPassword(true);
+            if (
+                passwordForm.new_password !==
+                passwordForm.confirm_password
+            ) {
 
-
-        try {
-
-            const response = await fetch(
-                "http://localhost:5000/api/users/change-password",
-                {
-                    method: "PUT",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-
-                        Authorization:
-                            `Bearer ${token}`
-                    },
-
-                    body: JSON.stringify({
-
-                        current_password:
-                            passwordForm.current_password,
-
-                        new_password:
-                            passwordForm.new_password
-
-                    })
-                }
-            );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.message ||
-                    "Failed to change password"
+                showNotification(
+                    "error",
+                    "New passwords do not match"
                 );
+
+                return;
 
             }
 
 
-            setPasswordForm({
-                current_password: "",
-                new_password: "",
-                confirm_password: ""
-            });
+            setChangingPassword(true);
 
 
-            showNotification(
-                "success",
-                "Password changed successfully"
-            );
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/users/change-password",
+                        {
+
+                            method: "PUT",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${token}`
+
+                            },
 
 
-        } catch (error) {
+                            body: JSON.stringify({
 
-            showNotification(
-                "error",
-                error.message
-            );
+                                current_password:
+                                    passwordForm.current_password,
 
-        } finally {
+                                new_password:
+                                    passwordForm.new_password
 
-            setChangingPassword(false);
+                            })
 
-        }
+                        }
+                    );
 
-    };
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to change password"
+                    );
+
+                }
+
+
+                setPasswordForm({
+
+                    current_password: "",
+                    new_password: "",
+                    confirm_password: ""
+
+                });
+
+
+                showNotification(
+                    "success",
+                    "Password changed successfully"
+                );
+
+
+            } catch (error) {
+
+                showNotification(
+                    "error",
+                    error.message
+                );
+
+
+            } finally {
+
+                setChangingPassword(
+                    false
+                );
+
+            }
+
+        };
+
 
 
     // ================================
@@ -513,6 +624,7 @@ export default function Profile() {
 
                 <BuyerNavbar />
 
+
                 <main className="profile-page">
 
                     <div className="profile-container">
@@ -525,6 +637,7 @@ export default function Profile() {
 
                 </main>
 
+
                 <Footer />
 
             </>
@@ -532,6 +645,7 @@ export default function Profile() {
         );
 
     }
+
 
 
     // ================================
@@ -556,6 +670,7 @@ export default function Profile() {
 
                     <div className="profile-page-header">
 
+
                         <div>
 
                             <h1>
@@ -579,21 +694,30 @@ export default function Profile() {
                                 <button
                                     type="button"
                                     className="profile-edit-button"
-                                    onClick={handleEdit}
+                                    onClick={
+                                        handleEdit
+                                    }
                                 >
+
                                     Edit Profile
+
                                 </button>
 
                             )}
 
 
                             <div className="profile-avatar-large">
+
                                 👤
+
                             </div>
+
 
                         </div>
 
+
                     </div>
+
 
 
                     {/* =========================
@@ -601,6 +725,7 @@ export default function Profile() {
                     ========================= */}
 
                     <div className="profile-sections">
+
 
 
                         {/* =========================
@@ -651,11 +776,14 @@ export default function Profile() {
 
                                     <strong>
 
-                                        {profile.created_at
-                                            ? new Date(
-                                                profile.created_at
-                                            ).toLocaleDateString()
-                                            : "-"
+                                        {
+                                            profile.created_at
+
+                                                ? new Date(
+                                                    profile.created_at
+                                                ).toLocaleDateString()
+
+                                                : "-"
                                         }
 
                                     </strong>
@@ -680,8 +808,14 @@ export default function Profile() {
                             </h2>
 
 
-                            <form onSubmit={handleSubmit}>
+                            <form
+                                onSubmit={
+                                    handleSubmit
+                                }
+                            >
 
+
+                                {/* NAME */}
 
                                 <div className="profile-form-row">
 
@@ -737,6 +871,9 @@ export default function Profile() {
                                 </div>
 
 
+
+                                {/* EMAIL */}
+
                                 <div className="profile-field">
 
                                     <label>
@@ -745,7 +882,9 @@ export default function Profile() {
 
                                     <input
                                         type="email"
-                                        value={profile.email}
+                                        value={
+                                            profile.email
+                                        }
                                         disabled
                                     />
 
@@ -755,6 +894,9 @@ export default function Profile() {
 
                                 </div>
 
+
+
+                                {/* PHONE */}
 
                                 <div className="profile-field">
 
@@ -780,6 +922,11 @@ export default function Profile() {
                                 </div>
 
 
+
+                                {/* =========================
+                                    SHIPPING
+                                ========================= */}
+
                                 <div className="profile-field">
 
                                     <label>
@@ -803,6 +950,65 @@ export default function Profile() {
 
                                 </div>
 
+
+                                <div className="profile-form-row">
+
+
+                                    <div className="profile-field">
+
+                                        <label>
+                                            Shipping City
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="shipping_city"
+                                            value={
+                                                profile.shipping_city
+                                            }
+                                            onChange={
+                                                handleChange
+                                            }
+                                            disabled={
+                                                !isEditing
+                                            }
+                                            placeholder="Enter city"
+                                        />
+
+                                    </div>
+
+
+                                    <div className="profile-field">
+
+                                        <label>
+                                            Shipping Postal Code
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="shipping_postal_code"
+                                            value={
+                                                profile.shipping_postal_code
+                                            }
+                                            onChange={
+                                                handleChange
+                                            }
+                                            disabled={
+                                                !isEditing
+                                            }
+                                            placeholder="Enter postal code"
+                                        />
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                                {/* =========================
+                                    BILLING
+                                ========================= */}
 
                                 <div className="profile-field">
 
@@ -828,6 +1034,63 @@ export default function Profile() {
                                 </div>
 
 
+                                <div className="profile-form-row">
+
+
+                                    <div className="profile-field">
+
+                                        <label>
+                                            Billing City
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="billing_city"
+                                            value={
+                                                profile.billing_city
+                                            }
+                                            onChange={
+                                                handleChange
+                                            }
+                                            disabled={
+                                                !isEditing
+                                            }
+                                            placeholder="Enter city"
+                                        />
+
+                                    </div>
+
+
+                                    <div className="profile-field">
+
+                                        <label>
+                                            Billing Postal Code
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="billing_postal_code"
+                                            value={
+                                                profile.billing_postal_code
+                                            }
+                                            onChange={
+                                                handleChange
+                                            }
+                                            disabled={
+                                                !isEditing
+                                            }
+                                            placeholder="Enter postal code"
+                                        />
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                                {/* ACTIONS */}
+
                                 {isEditing && (
 
                                     <div className="profile-form-actions">
@@ -836,22 +1099,35 @@ export default function Profile() {
                                         <button
                                             type="button"
                                             className="profile-cancel-button"
-                                            onClick={handleCancel}
-                                            disabled={saving}
+                                            onClick={
+                                                handleCancel
+                                            }
+                                            disabled={
+                                                saving
+                                            }
                                         >
+
                                             Cancel
+
                                         </button>
 
 
                                         <button
                                             type="submit"
                                             className="profile-save-button"
-                                            disabled={saving}
-                                        >
-                                            {saving
-                                                ? "Saving..."
-                                                : "Save Changes"
+                                            disabled={
+                                                saving
                                             }
+                                        >
+
+                                            {
+                                                saving
+
+                                                    ? "Saving..."
+
+                                                    : "Save Changes"
+                                            }
+
                                         </button>
 
 
@@ -877,7 +1153,11 @@ export default function Profile() {
                             </h2>
 
 
-                            <form onSubmit={handleChangePassword}>
+                            <form
+                                onSubmit={
+                                    handleChangePassword
+                                }
+                            >
 
 
                                 <div className="profile-field">
@@ -955,9 +1235,12 @@ export default function Profile() {
                                         }
                                     >
 
-                                        {changingPassword
-                                            ? "Changing..."
-                                            : "Change Password"
+                                        {
+                                            changingPassword
+
+                                                ? "Changing..."
+
+                                                : "Change Password"
                                         }
 
                                     </button>
@@ -971,6 +1254,7 @@ export default function Profile() {
 
 
                     </div>
+
 
                 </div>
 
@@ -987,15 +1271,19 @@ export default function Profile() {
             {notification && (
 
                 <Notification
+
                     type={
                         notification.type
                     }
+
                     message={
                         notification.message
                     }
+
                     onCancel={() =>
                         setNotification(null)
                     }
+
                 />
 
             )}

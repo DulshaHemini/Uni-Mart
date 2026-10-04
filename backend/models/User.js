@@ -39,7 +39,31 @@ const userSchema = new mongoose.Schema(
             trim: true
         },
 
+        shipping_city: {
+            type: String,
+            default: "",
+            trim: true
+        },
+
+        shipping_postal_code: {
+            type: String,
+            default: "",
+            trim: true
+        },
+
         billing_address: {
+            type: String,
+            default: "",
+            trim: true
+        },
+
+        billing_city: {
+            type: String,
+            default: "",
+            trim: true
+        },
+
+        billing_postal_code: {
             type: String,
             default: "",
             trim: true

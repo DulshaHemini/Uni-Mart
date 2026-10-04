@@ -258,7 +258,11 @@ export async function updateUserProfile(req, res) {
             last_name,
             phone_number,
             shipping_address,
-            billing_address
+            shipping_city,
+            shipping_postal_code,
+            billing_address,
+            billing_city,
+            billing_postal_code
         } = req.body;
 
         const user = await User.findById(
@@ -289,6 +293,24 @@ export async function updateUserProfile(req, res) {
 
         if (billing_address !== undefined) {
             user.billing_address = billing_address.trim();
+        }
+
+        if (shipping_city !== undefined) {
+            user.shipping_city = shipping_city.trim();
+        }
+
+        if (billing_city !== undefined) {
+            user.billing_city = billing_city.trim();
+        }
+
+        if (shipping_postal_code !== undefined) {
+            user.shipping_postal_code =
+                shipping_postal_code.trim();
+        }
+
+        if (billing_postal_code !== undefined) {
+            user.billing_postal_code =
+                billing_postal_code.trim();
         }
 
         await user.save();
