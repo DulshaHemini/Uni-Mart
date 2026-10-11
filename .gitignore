@@ -18,3 +18,9 @@ backend/dist/
 # OS / Editor files
 .DS_Store
 .vscode/
+
+# testpayhere
+backend/testPayHereSignature.js
+
+
+
