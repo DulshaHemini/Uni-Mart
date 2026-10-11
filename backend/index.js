@@ -11,7 +11,7 @@ import cartRouter from "./routes/cartRoutes.js";
 import paymentRouter from "./routes/paymentRoutes.js";
 import orderRouter
     from "./routes/orderRoutes.js";dotenv.config();
-
+import adminRouter from "./routes/adminRoutes.js";
 
 const app = express();
 
@@ -38,6 +38,7 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/orders",orderRouter);
+app.use("/api/admin", adminRouter);
 
 
 

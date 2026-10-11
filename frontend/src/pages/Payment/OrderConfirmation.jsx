@@ -42,71 +42,96 @@ export default function OrderConfirmation() {
 
     useEffect(() => {
 
-        const fetchOrder = async () => {
+    if (!orderId) {
 
-            if (!orderId) {
+        setError("Order ID not found");
+        setLoading(false);
 
-                setError(
-                    "Order ID not found"
+        return;
+
+    }
+
+
+    let intervalId;
+
+
+    const fetchOrder = async () => {
+
+        try {
+
+            const response =
+                await fetch(
+                    `http://localhost:5000/api/orders/${orderId}`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
                 );
 
-                setLoading(false);
 
-                return;
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to load order details"
+                );
 
             }
 
 
-            try {
-
-                const response =
-                    await fetch(
-                        `http://localhost:5000/api/orders/${orderId}`,
-                        {
-                            headers: {
-                                Authorization:
-                                    `Bearer ${token}`
-                            }
-                        }
-                    );
+            setOrderData(data);
+            setLoading(false);
 
 
-                const data =
-                    await response.json();
+            // Stop checking once payment is confirmed
+            if (
+                data.payment?.payment_status === "success" ||
+                data.payment?.payment_status === "failed" ||
+                data.payment?.payment_status === "cancelled"
+            ) {
 
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        data.message ||
-                        "Failed to load order details"
-                    );
-
+                if (intervalId) {
+                    clearInterval(intervalId);
                 }
 
-
-                setOrderData(data);
-
-
-            } catch (error) {
-
-                setError(
-                    error.message
-                );
-
-
-            } finally {
-
-                setLoading(false);
-
             }
 
-        };
+
+        } catch (error) {
+
+            setError(error.message);
+            setLoading(false);
+
+        }
+
+    };
 
 
-        fetchOrder();
+    // First request immediately
+    fetchOrder();
 
-    }, [orderId, token]);
+
+    // Then check every 2 seconds
+    intervalId =
+        setInterval(
+            fetchOrder,
+            2000
+        );
+
+
+    return () => {
+
+        clearInterval(intervalId);
+
+    };
+
+}, [orderId, token]);
 
 
 

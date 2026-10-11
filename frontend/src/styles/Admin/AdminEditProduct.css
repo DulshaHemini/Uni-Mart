@@ -1,0 +1,197 @@
+.admin-edit-page {
+    min-height: 100vh;
+    background-color: #F8FAFC;
+    padding: 32px;
+}
+
+
+.admin-edit-header {
+    max-width: 1000px;
+    margin: 0 auto 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+
+.admin-edit-header h1 {
+    margin-bottom: 5px;
+    color: #1E2B60;
+}
+
+
+.admin-edit-header p {
+    color: #6B7280;
+}
+
+
+.admin-edit-back {
+    border: none;
+    background-color: #1E2B60;
+    color: #FFFFFF;
+    padding: 11px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+
+.admin-edit-card {
+    max-width: 1000px;
+    margin: auto;
+
+    background-color: #FFFFFF;
+
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+
+    padding: 26px;
+}
+
+
+.admin-edit-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+
+.admin-edit-group {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.admin-edit-group label {
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+
+.admin-edit-group input,
+.admin-edit-group select,
+.admin-edit-group textarea {
+    width: 100%;
+
+    border: 1px solid #D1D5DB;
+
+    border-radius: 7px;
+
+    padding: 11px 12px;
+
+    font-family: inherit;
+
+    outline: none;
+}
+
+
+.admin-edit-group input:focus,
+.admin-edit-group select:focus,
+.admin-edit-group textarea:focus {
+    border-color: #1E2B60;
+}
+
+
+.admin-edit-full {
+    grid-column: 1 / -1;
+}
+
+
+.admin-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+
+.admin-edit-actions button {
+    border: none;
+    padding: 11px 18px;
+    border-radius: 7px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+.admin-edit-cancel {
+    background-color: #E5E7EB;
+    color: #374151;
+}
+
+
+.admin-edit-save {
+    background-color: #F97316;
+    color: #FFFFFF;
+}
+
+
+.admin-edit-save:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+.admin-edit-error {
+    background-color: #FEE2E2;
+    color: #991B1B;
+
+    padding: 12px;
+
+    border-radius: 7px;
+
+    margin-bottom: 20px;
+}
+
+
+.admin-edit-success {
+    background-color: #DCFCE7;
+    color: #166534;
+
+    padding: 12px;
+
+    border-radius: 7px;
+
+    margin-bottom: 20px;
+}
+
+
+.admin-edit-state {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media (max-width: 700px) {
+
+    .admin-edit-page {
+        padding: 20px;
+    }
+
+
+    .admin-edit-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+
+    .admin-edit-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .admin-edit-full {
+        grid-column: auto;
+    }
+
+}

@@ -26,7 +26,12 @@ import OrderConfirmation from "./pages/Payment/OrderConfirmation.jsx";
 import PaymentCancel from "./pages/Payment/PaymentCancel.jsx";
 
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
-
+import AdminProducts from "./pages/Admin/AdminProducts.jsx";
+import AdminEditProduct from "./pages/Admin/AdminEditProduct.jsx";
+import AdminInventory from "./pages/Admin/AdminInventory.jsx";
+import AdminOrders from "./pages/Admin/AdminOrders.jsx";
+import AdminOrderDetails from "./pages/Admin/AdminOrderDetails.jsx";
+import AdminUsers from "./pages/Admin/AdminUsers.jsx";
 
 function App() {
 
@@ -209,8 +214,63 @@ function App() {
                     }
                 />
 
+                <Route
+                path="/admin/products"
+                element={
+                    <ProtectedRoute allowedRoles={["admin"]}>
+                        <AdminProducts />
+                    </ProtectedRoute>
+                }
+                 />
+
+                <Route
+                path="/admin/products/:id/edit"
+                element={
+                    <ProtectedRoute allowedRoles={["admin"]}>
+                        <AdminEditProduct />
+                    </ProtectedRoute>
+                }
+                />
+
+                <Route
+                    path="/admin/inventory"
+                    element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                            <AdminInventory />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/orders"
+                    element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                            <AdminOrders />
+                        </ProtectedRoute>
+                    }
+                />
+
+                    <Route
+                    path="/admin/orders/:id"
+                    element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                            <AdminOrderDetails />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/users"
+                    element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                            <AdminUsers />
+                        </ProtectedRoute>
+                    }
+                />
 
             </Routes>
+
+            
 
         </BrowserRouter>
 

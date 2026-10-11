@@ -49,7 +49,7 @@ export async function getProducts(req, res) {
 
 
         // Filter
-        let filter = {};
+        let filter = {status: "active"};
 
 
         // Search

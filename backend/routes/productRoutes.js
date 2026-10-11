@@ -6,9 +6,9 @@ import {
     getProducts,
     getProductsBySeller,
     updateProduct,
-    deleteProduct
+    deleteProduct,
 } from "../controllers/productController.js";
-import { get } from "mongoose";
+
 
 const productRouter = express.Router();
 

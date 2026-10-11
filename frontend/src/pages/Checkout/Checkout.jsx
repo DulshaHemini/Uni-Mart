@@ -605,9 +605,7 @@ export default function Checkout() {
                 `http://localhost:5173/payment-cancel?order_id=${orderId}`,
 
             notify_url:
-                "http://localhost:5000/api/payments/payhere/notify",
-
-
+    "https://glazing-pastor-abdomen.ngrok-free.dev/api/payments/payhere/notify",
             order_id:
                 orderId,
 

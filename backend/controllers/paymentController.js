@@ -1,8 +1,15 @@
 import crypto from "crypto";
 import Order from "../models/Order.js";
+import OrderItem from "../models/OrderItem.js";
 import Payment from "../models/Payment.js";
+import Product from "../models/Product.js";
+
 import Cart from "../models/Cart.js";
 import CartItem from "../models/CartItem.js";
+
+
+
+
 
 
 // ================================
@@ -365,34 +372,106 @@ export const handlePayHereNotification = async (req, res) => {
         // SUCCESS
         if (status === "2") {
 
-            payment.payment_status =
-                "success";
+    // ================================
+    // PREVENT DUPLICATE STOCK REDUCTION
+    // ================================
 
-            order.order_status =
-                "paid";
-
-
-            // ================================
-            // CLEAR BUYER CART
-            // ================================
-
-            const cart =
-                await Cart.findOne({
-                    user_id:
-                        order.user_id
-                });
+    const alreadyProcessed =
+        payment.payment_status ===
+        "success";
 
 
-            if (cart) {
+    // ================================
+    // UPDATE PAYMENT + ORDER
+    // ================================
 
-                await CartItem.deleteMany({
-                    cart_id:
-                        cart._id
-                });
+    payment.payment_status =
+        "success";
+
+    order.order_status =
+        "paid";
+
+
+    // ================================
+    // REDUCE STOCK ONLY ONCE
+    // ================================
+
+    if (!alreadyProcessed) {
+
+        const orderItems =
+            await OrderItem.find({
+                order_id:
+                    order._id
+            });
+
+
+        for (const item of orderItems) {
+
+            const product =
+                await Product.findById(
+                    item.product_id
+                );
+
+
+            if (!product) {
+
+                console.log(
+                    "Product not found:",
+                    item.product_id
+                );
+
+                continue;
 
             }
 
+
+            // Extra safety check
+            if (
+                product.stock_quantity <
+                item.quantity
+            ) {
+
+                console.log(
+                    `Insufficient stock for ${product.product_name}`
+                );
+
+                continue;
+
+            }
+
+
+            product.stock_quantity -=
+                item.quantity;
+
+
+            await product.save();
+
         }
+
+
+        // ================================
+        // CLEAR BUYER CART
+        // ================================
+
+        const cart =
+            await Cart.findOne({
+                user_id:
+                    order.user_id
+            });
+
+
+        if (cart) {
+
+            await CartItem.deleteMany({
+                cart_id:
+                    cart._id
+            });
+
+        }
+
+    }
+
+}
 
 
         // PENDING

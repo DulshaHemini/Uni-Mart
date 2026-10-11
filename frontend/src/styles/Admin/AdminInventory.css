@@ -1,0 +1,256 @@
+.admin-inventory-page {
+    min-height: 100vh;
+    background-color: #F8FAFC;
+    padding: 32px;
+}
+
+
+/* HEADER */
+
+.admin-inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+
+.admin-inventory-header h1 {
+    color: #1E2B60;
+    margin-bottom: 5px;
+}
+
+
+.admin-inventory-header p {
+    color: #6B7280;
+}
+
+
+.admin-inventory-header > button {
+    border: none;
+
+    background-color: #1E2B60;
+    color: white;
+
+    padding: 11px 16px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+
+/* CARD */
+
+.inventory-card {
+    background-color: white;
+
+    border: 1px solid #E5E7EB;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+
+.inventory-table-wrapper {
+    overflow-x: auto;
+}
+
+
+.inventory-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+
+.inventory-table th {
+    text-align: left;
+
+    padding: 13px;
+
+    background-color: #F8FAFC;
+
+    color: #6B7280;
+
+    font-size: 12px;
+}
+
+
+.inventory-table td {
+    padding: 14px 13px;
+
+    border-top: 1px solid #E5E7EB;
+
+    font-size: 13px;
+}
+
+
+.inventory-product-name {
+    font-weight: 600;
+    color: #111827;
+}
+
+
+/* STOCK BADGES */
+
+.inventory-stock-badge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.inventory-good {
+    background-color: #DCFCE7;
+    color: #166534;
+}
+
+
+.inventory-low {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+
+.inventory-out {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}
+
+
+/* PRODUCT STATUS */
+
+.inventory-product-status {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: capitalize;
+}
+
+
+.inventory-active {
+    background-color: #DCFCE7;
+    color: #166534;
+}
+
+
+.inventory-inactive {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}
+
+
+/* INPUT */
+
+.inventory-stock-input {
+    width: 90px;
+
+    padding: 8px;
+
+    border: 1px solid #D1D5DB;
+
+    border-radius: 6px;
+}
+
+
+/* ACTIONS */
+
+.inventory-actions {
+    display: flex;
+    gap: 7px;
+}
+
+
+.inventory-edit,
+.inventory-save,
+.inventory-cancel {
+    border: none;
+
+    padding: 7px 10px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+}
+
+
+.inventory-edit {
+    background-color: #EEF2FF;
+    color: #1E2B60;
+}
+
+
+.inventory-save {
+    background-color: #F97316;
+    color: white;
+}
+
+
+.inventory-cancel {
+    background-color: #E5E7EB;
+    color: #374151;
+}
+
+
+/* STATES */
+
+.inventory-state,
+.inventory-error {
+    background-color: white;
+
+    padding: 30px;
+
+    text-align: center;
+
+    border-radius: 8px;
+}
+
+
+.inventory-error {
+    color: #DC2626;
+}
+
+
+.inventory-empty {
+    text-align: center;
+
+    padding: 30px !important;
+
+    color: #9CA3AF;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 750px) {
+
+    .admin-inventory-page {
+        padding: 20px;
+    }
+
+
+    .admin-inventory-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
