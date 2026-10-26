@@ -24,6 +24,20 @@ import "../../styles/Products/Products.css";
 
 
 export default function Products() {
+    const [searchParams] = useSearchParams();
+    const categoryFromUrl = searchParams.get("category");
+    const searchFromUrl = searchParams.get("search");
+
+    return (
+        <ProductsContent
+            key={`${categoryFromUrl || ""}:${searchFromUrl || ""}`}
+            categoryFromUrl={categoryFromUrl}
+            searchFromUrl={searchFromUrl}
+        />
+    );
+}
+
+function ProductsContent({ categoryFromUrl, searchFromUrl }) {
 
     // =========================
     // STATES
@@ -42,12 +56,14 @@ export default function Products() {
         useState("");
 
     const [searchTerm, setSearchTerm] =
-        useState("");
+        useState(searchFromUrl || "");
 
     const [
         selectedCategories,
         setSelectedCategories
-    ] = useState([]);
+    ] = useState(
+        categoryFromUrl ? [categoryFromUrl] : []
+    );
 
     const [
         selectedConditions,
@@ -64,22 +80,6 @@ export default function Products() {
         wishlistLoadingId,
         setWishlistLoadingId
     ] = useState(null);
-
-
-    // =========================
-    // URL PARAMETERS
-    // =========================
-
-    const [searchParams] =
-        useSearchParams();
-
-
-    const categoryFromUrl =
-        searchParams.get("category");
-
-
-    const searchFromUrl =
-        searchParams.get("search");
 
 
     // =========================
@@ -246,48 +246,6 @@ export default function Products() {
 
 
     // =========================
-    // CATEGORY FROM URL
-    // =========================
-
-    useEffect(() => {
-
-        if (categoryFromUrl) {
-
-            setSelectedCategories([
-                categoryFromUrl
-            ]);
-
-        } else {
-
-            setSelectedCategories([]);
-
-        }
-
-    }, [categoryFromUrl]);
-
-
-    // =========================
-    // SEARCH FROM URL
-    // =========================
-
-    useEffect(() => {
-
-        if (searchFromUrl) {
-
-            setSearchTerm(
-                searchFromUrl
-            );
-
-        } else {
-
-            setSearchTerm("");
-
-        }
-
-    }, [searchFromUrl]);
-
-
-    // =========================
     // CATEGORY FILTER CHANGE
     // =========================
 
@@ -377,34 +335,14 @@ export default function Products() {
 
 
             // CATEGORY
-
-            let productCategory = "";
-
-
-            if (
+            const productCategory =
                 product.category_id &&
                 typeof product.category_id === "object"
-            ) {
-
-                productCategory =
-                    product.category_id
-                        ?.category_name || "";
-
-            } else {
-
-                const matchingCategory =
-                    categories.find(
+                    ? product.category_id.category_name || ""
+                    : categories.find(
                         (category) =>
-                            category._id ===
-                            product.category_id
-                    );
-
-
-                productCategory =
-                    matchingCategory
-                        ?.category_name || "";
-
-            }
+                            category._id === product.category_id
+                    )?.category_name || "";
 
 
             const matchesCategory =

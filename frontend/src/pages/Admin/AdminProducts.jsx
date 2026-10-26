@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../../styles/Admin/AdminProducts.css";
@@ -12,6 +12,7 @@ export default function AdminProducts() {
 
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState("");
+    const searchRef = useRef(search);
     const [statusFilter, setStatusFilter] = useState("");
 
     const [loading, setLoading] = useState(true);
@@ -76,10 +77,54 @@ export default function AdminProducts() {
 
 
     useEffect(() => {
+        searchRef.current = search;
+    }, [search]);
 
-        fetchProducts();
+    useEffect(() => {
+        const loadProducts = async () => {
+            try {
+                setLoading(true);
+                setError("");
 
-    }, [statusFilter]);
+                const params = new URLSearchParams();
+                const currentSearch = searchRef.current.trim();
+
+                if (currentSearch) {
+                    params.append("search", currentSearch);
+                }
+
+                if (statusFilter) {
+                    params.append("status", statusFilter);
+                }
+
+                const response = await fetch(
+                    `http://localhost:5000/api/admin/products?${params.toString()}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Failed to load products."
+                    );
+                }
+
+                setProducts(data.products || []);
+            } catch (error) {
+                console.error(error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadProducts();
+    }, [statusFilter, token]);
 
 
     const handleSearch = (e) => {

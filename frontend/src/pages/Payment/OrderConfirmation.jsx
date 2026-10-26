@@ -43,12 +43,7 @@ export default function OrderConfirmation() {
     useEffect(() => {
 
     if (!orderId) {
-
-        setError("Order ID not found");
-        setLoading(false);
-
         return;
-
     }
 
 
@@ -135,7 +130,12 @@ export default function OrderConfirmation() {
 
 
 
-    if (loading) {
+    const displayedError = !orderId
+        ? "Order ID not found"
+        : error;
+    const isLoading = Boolean(orderId) && loading;
+
+    if (isLoading) {
 
         return (
 
@@ -165,7 +165,7 @@ export default function OrderConfirmation() {
 
 
 
-    if (error) {
+    if (displayedError) {
 
         return (
 
@@ -186,7 +186,7 @@ export default function OrderConfirmation() {
                         </h1>
 
                         <p>
-                            {error}
+                            {displayedError}
                         </p>
 
                         <div className="payment-result-actions">

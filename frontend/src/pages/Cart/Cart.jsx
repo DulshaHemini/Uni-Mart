@@ -21,12 +21,11 @@ export default function Cart() {
 
 
     // =========================
+
     // STATE
     // =========================
 
-    const [cart, setCart] =
-        useState(null);
-
+    const [, setCart] = useState(null);
     const [items, setItems] =
         useState([]);
 
@@ -34,7 +33,7 @@ export default function Cart() {
         useState(0);
 
     const [loading, setLoading] =
-        useState(true);
+        useState(Boolean(token));
 
     const [updatingItemId, setUpdatingItemId] =
         useState(null);
@@ -121,17 +120,44 @@ export default function Cart() {
     // =========================
 
     useEffect(() => {
-
-        if (token) {
-
-            fetchCart();
-
-        } else {
-
-            setLoading(false);
-
+        if (!token) {
+            return;
         }
 
+        const loadCart = async () => {
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/api/cart",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Failed to load cart."
+                    );
+                }
+
+                setCart(data.cart);
+                setItems(data.items || []);
+                setTotal(data.total || 0);
+            } catch (error) {
+                console.error("Cart fetch error:", error);
+                setNotification({
+                    type: "error",
+                    message: error.message || "Unable to load cart."
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadCart();
     }, [token]);
 
 

@@ -7,18 +7,12 @@ export default function ProtectedRoute({
 
     const token = localStorage.getItem("token");
 
-    let user = null;
+    let user;
 
     try {
-
-        user = JSON.parse(
-            localStorage.getItem("user")
-        );
-
-    } catch (error) {
-
+        user = JSON.parse(localStorage.getItem("user"));
+    } catch {
         user = null;
-
     }
 
 

@@ -40,67 +40,37 @@ export default function Wishlist() {
     // LOAD WISHLIST
     // =========================
 
-    const fetchWishlist =
-        async () => {
-
-        try {
-
-            const response =
-                await fetch(
+    useEffect(() => {
+        const loadWishlist = async () => {
+            try {
+                const response = await fetch(
                     "http://localhost:5000/api/wishlist",
                     {
                         headers: {
-                            Authorization:
-                                `Bearer ${token}`
+                            Authorization: `Bearer ${token}`
                         }
                     }
                 );
 
+                const data = await response.json();
 
-            const data =
-                await response.json();
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Failed to load wishlist."
+                    );
+                }
 
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.message ||
-                    "Failed to load wishlist."
-                );
-
+                setWishlist(data.wishlist || []);
+            } catch (error) {
+                console.error("Wishlist Error:", error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
             }
+        };
 
-
-            setWishlist(
-                data.wishlist || []
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Wishlist Error:",
-                error
-            );
-
-            setError(
-                error.message
-            );
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    };
-
-
-    useEffect(() => {
-
-        fetchWishlist();
-
-    }, []);
+        loadWishlist();
+    }, [token]);
 
 
     // =========================

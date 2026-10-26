@@ -21,62 +21,40 @@ export default function AdminOrders() {
     // LOAD ORDERS
     // ================================
 
-    const fetchOrders = async () => {
+    useEffect(() => {
+        const loadOrders = async () => {
+            try {
+                setLoading(true);
+                setError("");
 
-        try {
-
-            setLoading(true);
-            setError("");
-
-            const response = await fetch(
-                "http://localhost:5000/api/admin/orders",
-                {
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`
+                const response = await fetch(
+                    "http://localhost:5000/api/admin/orders",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     }
-                }
-            );
-
-
-            const data =
-                await response.json();
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.message ||
-                    "Failed to load orders."
                 );
 
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Failed to load orders."
+                    );
+                }
+
+                setOrders(data.orders || []);
+            } catch (error) {
+                console.error(error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
             }
+        };
 
-
-            setOrders(
-                data.orders || []
-            );
-
-        } catch (error) {
-
-            console.error(error);
-
-            setError(error.message);
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    };
-
-
-    useEffect(() => {
-
-        fetchOrders();
-
-    }, []);
+        loadOrders();
+    }, [token]);
 
 
     // ================================

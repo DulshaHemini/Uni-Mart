@@ -73,10 +73,40 @@ export default function AdminOrderDetails() {
 
 
     useEffect(() => {
+        const loadOrderDetails = async () => {
+            try {
+                setLoading(true);
+                setError("");
 
-        fetchOrderDetails();
+                const response = await fetch(
+                    `http://localhost:5000/api/admin/orders/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
 
-    }, [id]);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Failed to load order details."
+                    );
+                }
+
+                setOrderData(data);
+                setSelectedStatus(data.order.order_status);
+            } catch (error) {
+                console.error(error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadOrderDetails();
+    }, [id, token]);
 
 
     // ================================

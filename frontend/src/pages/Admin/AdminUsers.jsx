@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../../styles/Admin/AdminUsers.css";
@@ -10,6 +10,7 @@ export default function AdminUsers() {
 
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");
+    const searchRef = useRef(search);
     const [roleFilter, setRoleFilter] = useState("");
 
     const [loading, setLoading] = useState(true);
@@ -72,10 +73,54 @@ export default function AdminUsers() {
 
 
     useEffect(() => {
+        searchRef.current = search;
+    }, [search]);
 
-        fetchUsers();
+    useEffect(() => {
+        const loadUsers = async () => {
+            try {
+                setLoading(true);
+                setError("");
 
-    }, [roleFilter]);
+                const params = new URLSearchParams();
+                const currentSearch = searchRef.current.trim();
+
+                if (currentSearch) {
+                    params.append("search", currentSearch);
+                }
+
+                if (roleFilter) {
+                    params.append("role", roleFilter);
+                }
+
+                const response = await fetch(
+                    `http://localhost:5000/api/admin/users?${params.toString()}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Failed to load users."
+                    );
+                }
+
+                setUsers(data.users || []);
+            } catch (error) {
+                console.error(error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadUsers();
+    }, [roleFilter, token]);
 
 
     const handleSearch = (e) => {

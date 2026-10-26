@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import "../../styles/Admin/AdminInventory.css";
 
 
@@ -25,6 +24,8 @@ export default function AdminInventory() {
     const fetchInventory = async () => {
 
         try {
+
+
 
             setLoading(true);
             setError("");
@@ -66,10 +67,36 @@ export default function AdminInventory() {
 
 
     useEffect(() => {
+        const loadInventory = async () => {
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/api/admin/inventory",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
 
-        fetchInventory();
+                const data = await response.json();
 
-    }, []);
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Failed to load inventory."
+                    );
+                }
+
+                setProducts(data.products || []);
+            } catch (error) {
+                console.error(error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadInventory();
+    }, [token]);
 
 
     // ================================
