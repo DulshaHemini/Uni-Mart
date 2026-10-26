@@ -21,6 +21,8 @@ export default function BuyerHome() {
     const [searchTerm, setSearchTerm] = useState("");
 
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
     const [productsLoading, setProductsLoading] = useState(true);
     const [productsError, setProductsError] = useState("");
 
@@ -199,6 +201,40 @@ export default function BuyerHome() {
         );
     };
 
+    // Load categories from the backend.
+useEffect(() => {
+    let active = true;
+
+    async function loadCategories() {
+        try {
+            const response = await fetch(`${API_URL}/categories`);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Failed to load categories."
+                );
+            }
+
+            if (active) {
+                setCategories(data.categories || []);
+            }
+        } catch (error) {
+            console.error("Failed to load categories:", error);
+        } finally {
+            if (active) {
+                setCategoriesLoading(false);
+            }
+        }
+    }
+
+    loadCategories();
+
+    return () => {
+        active = false;
+    };
+}, []);
+
     // Add a product using the existing cart API.
     const handleAddToCart = async (product) => {
         if (!token || !user) {
@@ -376,50 +412,34 @@ export default function BuyerHome() {
                         </div>
                     </section>
 
-                    {/* CATEGORIES */}
-                    <section
-                        className="buyer-section"
-                        id="categories"
-                    >
-                        <div className="section-header">
-                            <h2>Browse Categories</h2>
-                            <Link to="/products">View All →</Link>
-                        </div>
+                    
+{/* CATEGORIES */}
+<section className="buyer-section" id="categories">
+    <div className="section-header">
+        <h2>Browse Categories</h2>
+        <Link to="/products">View All →</Link>
+    </div>
 
-                        <div className="category-grid">
-                            <Link
-                                to="/products"
-                                className="category-card"
-                            >
-                                <span>📚</span>
-                                <strong>Books</strong>
-                            </Link>
+    {categoriesLoading ? (
+        <p>Loading categories...</p>
+    ) : categories.length === 0 ? (
+        <p>No categories available.</p>
+    ) : (
+        <div className="category-grid">
+            {categories.map((category) => (
+                <Link
+                    key={category._id}
+                    to={`/products?category=${encodeURIComponent(category._id)}`}
+                    className="category-card"
+                >
+                    <span>{category.icon || "🛍️"}</span>
+                    <strong>{category.category_name}</strong>
+                </Link>
+            ))}
+        </div>
+    )}
+</section>
 
-                            <Link
-                                to="/products"
-                                className="category-card"
-                            >
-                                <span>💻</span>
-                                <strong>Electronics</strong>
-                            </Link>
-
-                            <Link
-                                to="/products"
-                                className="category-card"
-                            >
-                                <span>👕</span>
-                                <strong>Clothing</strong>
-                            </Link>
-
-                            <Link
-                                to="/products"
-                                className="category-card"
-                            >
-                                <span>✏️</span>
-                                <strong>Stationery</strong>
-                            </Link>
-                        </div>
-                    </section>
 
                     {/* RECOMMENDED PRODUCTS */}
                     <section className="buyer-section">
