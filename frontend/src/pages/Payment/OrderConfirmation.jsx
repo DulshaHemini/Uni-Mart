@@ -99,11 +99,14 @@ export default function OrderConfirmation() {
 
 
         } catch (error) {
+    setError(error.message);
+    setLoading(false);
 
-            setError(error.message);
-            setLoading(false);
-
-        }
+    // Stop retrying after an authentication or other request error.
+    if (intervalId) {
+        clearInterval(intervalId);
+    }
+}
 
     };
 

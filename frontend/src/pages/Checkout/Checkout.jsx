@@ -100,160 +100,108 @@ export default function Checkout() {
     // ================================
 
     useEffect(() => {
+        let isActive = true;
 
         const loadCheckoutData = async () => {
-
-            try {
-
-                // ----------------
-                // PROFILE
-                // ----------------
-
-                const profileResponse =
-                    await fetch(
-                        "http://localhost:5000/api/users/profile",
-                        {
-                            headers: {
-
-                                Authorization:
-                                    `Bearer ${token}`
-
-                            }
-                        }
-                    );
-
-
-                const profileData =
-                    await profileResponse.json();
-
-
-                if (!profileResponse.ok) {
-
-                    throw new Error(
-                        profileData.message ||
-                        "Failed to load profile"
-                    );
-
-                }
-
-
-
-                // ----------------
-                // CART
-                // ----------------
-
-                const cartResponse =
-                    await fetch(
-                        "http://localhost:5000/api/cart",
-                        {
-                            headers: {
-
-                                Authorization:
-                                    `Bearer ${token}`
-
-                            }
-                        }
-                    );
-
-
-                const cartData =
-                    await cartResponse.json();
-
-
-                if (!cartResponse.ok) {
-
-                    throw new Error(
-                        cartData.message ||
-                        "Failed to load cart"
-                    );
-
-                }
-
-
-
-                // ----------------
-                // SET PROFILE
-                // ----------------
-
-                setFormData({
-
-                    first_name:
-                        profileData.user.first_name || "",
-
-                    last_name:
-                        profileData.user.last_name || "",
-
-                    email:
-                        profileData.user.email || "",
-
-                    phone_number:
-                        profileData.user.phone_number || "",
-
-
-                    shipping_address:
-                        profileData.user.shipping_address || "",
-
-                    shipping_city:
-                        profileData.user.shipping_city || "",
-
-                    shipping_postal_code:
-                        profileData.user.shipping_postal_code || "",
-
-
-                    billing_address:
-                        profileData.user.billing_address ||
-                        profileData.user.shipping_address ||
-                        "",
-
-                    billing_city:
-                        profileData.user.billing_city ||
-                        profileData.user.shipping_city ||
-                        "",
-
-                    billing_postal_code:
-                        profileData.user.billing_postal_code ||
-                        profileData.user.shipping_postal_code ||
-                        ""
-
-                });
-
-
-
-                // ----------------
-                // SET CART
-                // ----------------
-
-                setCartItems(
-                    cartData.items || []
-                );
-
-
-                setTotal(
-                    Number(
-                        cartData.total || 0
-                    )
-                );
-
-
-            } catch (error) {
-
+            if (!token) {
                 showNotification(
                     "error",
-                    error.message
+                    "Your session is missing or expired. Please log in again."
                 );
-
-
-            } finally {
-
                 setLoading(false);
-
+                return;
             }
 
-        };
+            try {
+                // Load the logged-in user's profile.
+                const profileResponse = await fetch(
+                    "http://localhost:5000/api/users/profile",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
 
+                const profileData = await profileResponse.json().catch(() => ({}));
+
+                if (!profileResponse.ok) {
+                    if (profileResponse.status === 401) {
+                        throw new Error(
+                            "Your login session is invalid or expired. Please log in again."
+                        );
+                    }
+
+                    throw new Error(
+                        profileData.message || "Failed to load profile"
+                    );
+                }
+
+                // Load the user's cart.
+                const cartResponse = await fetch(
+                    "http://localhost:5000/api/cart",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const cartData = await cartResponse.json().catch(() => ({}));
+
+                if (!cartResponse.ok) {
+                    if (cartResponse.status === 401) {
+                        throw new Error(
+                            "Your login session is invalid or expired. Please log in again."
+                        );
+                    }
+
+                    throw new Error(
+                        cartData.message || "Failed to load cart"
+                    );
+                }
+
+                if (!isActive) return;
+
+                const user = profileData.user || {};
+
+                setFormData({
+                    first_name: user.first_name || "",
+                    last_name: user.last_name || "",
+                    email: user.email || "",
+                    phone_number: user.phone_number || "",
+                    shipping_address: user.shipping_address || "",
+                    shipping_city: user.shipping_city || "",
+                    shipping_postal_code: user.shipping_postal_code || "",
+                    billing_address:
+                        user.billing_address || user.shipping_address || "",
+                    billing_city:
+                        user.billing_city || user.shipping_city || "",
+                    billing_postal_code:
+                        user.billing_postal_code || user.shipping_postal_code || ""
+                });
+
+                setCartItems(cartData.items || []);
+                setTotal(Number(cartData.total || 0));
+            } catch (error) {
+                if (isActive) {
+                    showNotification(
+                        "error",
+                        error.message || "Failed to load checkout information"
+                    );
+                }
+            } finally {
+                if (isActive) {
+                    setLoading(false);
+                }
+            }
+        };
 
         loadCheckoutData();
 
+        return () => {
+            isActive = false;
+        };
     }, [token]);
 
 
@@ -378,6 +326,14 @@ export default function Checkout() {
     const handlePayNow = async (event) => {
 
     event.preventDefault();
+
+    if (!token) {
+        showNotification(
+            "error",
+            "Your session is missing or expired. Please log in again."
+        );
+        return;
+    }
 
 
     // ================================
