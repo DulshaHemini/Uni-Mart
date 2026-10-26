@@ -34,9 +34,9 @@ return (
                 <div>
                     <h3>Help</h3>
 
-                    <a href="#contact">Contact</a>
-                    <a href="#help">Help Center</a>
-                    <a href="#privacy">Privacy</a>
+                    <Link to="/contact">Contact</Link>
+                    <Link to="/help-center">Help Center</Link>
+                    <Link to="/privacy">Privacy</Link>
                 </div>
 
             </div>

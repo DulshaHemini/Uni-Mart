@@ -40,6 +40,9 @@ import AdminInventory from "./pages/Admin/AdminInventory.jsx";
 import AdminOrders from "./pages/Admin/AdminOrders.jsx";
 import AdminOrderDetails from "./pages/Admin/AdminOrderDetails.jsx";
 import AdminUsers from "./pages/Admin/AdminUsers.jsx";
+import HelpCenter from "./pages/Help/HelpCenter.jsx";
+import Contact from "./pages/Help/Contact.jsx";
+import Privacy from "./pages/Help/Privacy.jsx";
 
 import NotFound from "./pages/NotFound.jsx";
 
@@ -297,7 +300,7 @@ function App() {
                     }
                 />
 
-
+import Contact from "./pages/Contact/Contact.jsx";
 
                 {/* =========================
                     ADMIN ROUTES
@@ -366,6 +369,21 @@ function App() {
                             <AdminUsers />
                         </ProtectedRoute>
                     }
+                />
+
+                <Route
+                    path="/contact"
+                    element={<Contact />}
+                />
+
+                <Route
+                    path="/help-center"
+                    element={<HelpCenter />}
+                />
+
+                <Route
+                    path="/privacy"
+                    element={<Privacy />}
                 />
 
                 <Route
