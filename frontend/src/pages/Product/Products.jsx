@@ -686,20 +686,23 @@ const matchesCategory =
                                             }
                                         >
 
+                                            
                                             <input
+                                                type="checkbox"
                                                 checked={selectedCategories.some((selected) => {
-                                                const selectedValue = String(selected);
+                                                    const selectedValue = String(selected);
 
-                                                return (
-                                                    selectedValue === String(category._id) ||
-                                                    selectedValue.trim().toLowerCase() ===
-                                                        String(category.category_name ?? "")
-                                                            .trim()
-                                                            .toLowerCase()
-                                                );
-                                            })}
-                                            onChange={() => handleCategoryChange(category)}
+                                                    return (
+                                                        selectedValue === String(category._id) ||
+                                                        selectedValue.trim().toLowerCase() ===
+                                                            String(category.category_name ?? "")
+                                                                .trim()
+                                                                .toLowerCase()
+                                                    );
+                                                })}
+                                                onChange={() => handleCategoryChange(category)}
                                             />
+
 
 
                                             <span>
