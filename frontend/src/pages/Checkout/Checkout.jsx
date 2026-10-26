@@ -598,8 +598,9 @@ export default function Checkout() {
                 paymentData.merchant_id,
 
 
-            return_url:
-                "http://localhost:5173/order-confirmation",
+            
+        return_url:
+            `http://localhost:5173/order-confirmation?order_id=${orderId}`,
 
             cancel_url:
                 `http://localhost:5173/payment-cancel?order_id=${orderId}`,

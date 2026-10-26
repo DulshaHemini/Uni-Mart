@@ -154,7 +154,7 @@ export default function Login() {
 
                 }
 
-            }, 2500);
+            }, 500);
 
 
         } catch (error) {
