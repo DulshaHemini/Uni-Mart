@@ -7,8 +7,8 @@ import {
     getProductsBySeller,
     updateProduct,
     deleteProduct,
+    getRecentlyPurchasedProducts
 } from "../controllers/productController.js";
-
 
 const productRouter = express.Router();
 
@@ -16,14 +16,18 @@ productRouter.post("/", createProduct);
 
 productRouter.get("/", getProducts);
 
-productRouter.get("/seller/:sellerId",getProductsBySeller);
+// Keep this static route BEFORE /:id
+productRouter.get(
+    "/recently-purchased",
+    getRecentlyPurchasedProducts
+);
 
-productRouter.put("/:id",updateProduct);
+productRouter.get("/seller/:sellerId", getProductsBySeller);
 
-productRouter.delete("/:id",deleteProduct);
+productRouter.put("/:id", updateProduct);
+
+productRouter.delete("/:id", deleteProduct);
 
 productRouter.get("/:id", getProductById);
-
-
 
 export default productRouter;

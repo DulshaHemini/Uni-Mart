@@ -1,4 +1,5 @@
 import Product from "../models/Product.js";
+import OrderItem from "../models/OrderItem.js";
 
 
 // Create Product
@@ -290,4 +291,77 @@ export async function deleteProduct(req, res) {
 
     }
 
+}
+
+// Get recently purchased products from MongoDB
+export async function getRecentlyPurchasedProducts(req, res) {
+    try {
+        const products = await OrderItem.aggregate([
+            {
+                $lookup: {
+                    from: "orders",
+                    localField: "order_id",
+                    foreignField: "_id",
+                    as: "order"
+                }
+            },
+            { $unwind: "$order" },
+            {
+                $match: {
+                    "order.order_status": {
+                        $in: [
+                            "paid",
+                            "processing",
+                            "shipped",
+                            "completed"
+                        ]
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "product_id",
+                    foreignField: "_id",
+                    as: "product"
+                }
+            },
+            { $unwind: "$product" },
+            {
+                $match: {
+                    "product.status": "active"
+                }
+            },
+            {
+                $group: {
+                    _id: "$product._id",
+                    product_name: {
+                        $first: "$product.product_name"
+                    },
+                    price: {
+                        $first: "$product.price"
+                    },
+                    image: {
+                        $first: "$product.image"
+                    },
+                    lastPurchasedAt: {
+                        $max: "$order.created_at"
+                    },
+                    totalPurchased: {
+                        $sum: "$quantity"
+                    }
+                }
+            },
+            { $sort: { lastPurchasedAt: -1 } },
+            { $limit: 4 }
+        ]);
+
+        return res.status(200).json({ products });
+    } catch (error) {
+        console.error("Recently Purchased Error:", error);
+
+        return res.status(500).json({
+            message: "Failed to load recently purchased products"
+        });
+    }
 }
