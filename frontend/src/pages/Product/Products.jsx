@@ -346,7 +346,7 @@ function ProductsContent({ categoryFromUrl, searchFromUrl }) {
 
 
             // CATEGORY
-            // CATEGORY
+          
 
 const populatedCategory =
     product.category_id &&

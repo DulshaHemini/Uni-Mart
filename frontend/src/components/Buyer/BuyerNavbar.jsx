@@ -1,3 +1,4 @@
+
 import {
     useEffect,
     useRef,
@@ -9,17 +10,64 @@ import {
     useNavigate
 } from "react-router-dom";
 
-
 export default function BuyerNavbar() {
 
     const navigate = useNavigate();
 
     const [profileOpen, setProfileOpen] = useState(false);
-
     const [cartCount, setCartCount] = useState(0);
+    const [user, setUser] = useState(null);
 
     const profileRef = useRef(null);
 
+    // =========================
+    // CURRENT USER
+    // =========================
+
+    useEffect(() => {
+
+        const loadUser = () => {
+
+            try {
+                const storedUser = localStorage.getItem("user");
+
+                if (!storedUser || !storedUser.trim()) {
+                    setUser(null);
+                    return;
+                }
+
+                const parsedUser = JSON.parse(storedUser);
+
+                setUser(
+                    parsedUser &&
+                    typeof parsedUser === "object" &&
+                    !Array.isArray(parsedUser)
+                        ? parsedUser
+                        : null
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Unable to read stored user:",
+                    error
+                );
+
+                setUser(null);
+            }
+        };
+
+        loadUser();
+
+        window.addEventListener("storage", loadUser);
+
+        return () => {
+            window.removeEventListener("storage", loadUser);
+        };
+
+    }, []);
+
+    const token = localStorage.getItem("token");
 
     // =========================
     // CLOSE PROFILE DROPDOWN
@@ -38,12 +86,10 @@ export default function BuyerNavbar() {
 
         };
 
-
         document.addEventListener(
             "mousedown",
             handleClickOutside
         );
-
 
         return () => {
 
@@ -56,19 +102,6 @@ export default function BuyerNavbar() {
 
     }, []);
 
-
-    // =========================
-    // CURRENT USER
-    // =========================
-
-    const user = JSON.parse(
-        localStorage.getItem("user")
-    );
-
-    const token =
-        localStorage.getItem("token");
-
-
     // =========================
     // GET CART COUNT
     // =========================
@@ -76,9 +109,9 @@ export default function BuyerNavbar() {
     useEffect(() => {
 
         if (!token) {
+            setCartCount(0);
             return;
         }
-
 
         const fetchCartCount = async () => {
 
@@ -88,31 +121,24 @@ export default function BuyerNavbar() {
                     "http://localhost:5000/api/cart",
                     {
                         headers: {
-                            Authorization:
-                                `Bearer ${token}`
+                            Authorization: `Bearer ${token}`
                         }
                     }
                 );
 
-                const data =
-                    await response.json();
-
+                const data = await response.json();
 
                 if (!response.ok) {
                     throw new Error(
-                        data.message ||
-                        "Failed to load cart."
+                        data.message || "Failed to load cart."
                     );
                 }
 
-
-                setCartCount(
-                    data.item_count || 0
-                );
+                setCartCount(data.item_count || 0);
 
             } catch (error) {
 
-                console.log(
+                console.error(
                     "Cart count error:",
                     error
                 );
@@ -121,23 +147,16 @@ export default function BuyerNavbar() {
 
         };
 
-
         fetchCartCount();
 
-
-        // Listen for cart updates
         const handleCartUpdated = () => {
-
             fetchCartCount();
-
         };
-
 
         window.addEventListener(
             "cartUpdated",
             handleCartUpdated
         );
-
 
         return () => {
 
@@ -150,7 +169,6 @@ export default function BuyerNavbar() {
 
     }, [token]);
 
-
     // =========================
     // LOGOUT
     // =========================
@@ -158,28 +176,29 @@ export default function BuyerNavbar() {
     const handleLogout = () => {
 
         localStorage.removeItem("token");
-
         localStorage.removeItem("user");
 
-        navigate("/");
+        setUser(null);
+        setCartCount(0);
+        setProfileOpen(false);
 
+        navigate("/");
     };
 
+    // =========================
+    // NAVBAR
+    // =========================
 
     return (
 
         <header className="buyer-header">
 
-
-            {/* =========================
-                LOGO
-            ========================= */}
+            {/* LOGO */}
 
             <Link
                 to="/buyer"
                 className="buyer-logo"
             >
-
                 <span className="logo-uni">
                     Uni
                 </span>
@@ -187,57 +206,43 @@ export default function BuyerNavbar() {
                 <span className="logo-mart">
                     Mart
                 </span>
-
             </Link>
 
-
-            {/* =========================
-                NAVIGATION
-            ========================= */}
+            {/* NAVIGATION */}
 
             <nav className="buyer-nav">
-
 
                 <Link to="/buyer">
                     Home
                 </Link>
 
-
                 <Link to="/products">
                     Shop
                 </Link>
-
 
                 <Link to="/buyer#categories">
                     Categories
                 </Link>
 
-
                 <Link to="/buyer#activity">
                     Activity
                 </Link>
 
-
             </nav>
 
-
-            {/* =========================
-                HEADER ACTIONS
-            ========================= */}
+            {/* HEADER ACTIONS */}
 
             <div className="buyer-actions">
 
-
                 {/* WISHLIST */}
 
-                                <Link
+                <Link
                     to="/wishlist"
                     className="header-icon"
                     title="Wishlist"
                 >
                     ♡
                 </Link>
-
 
                 {/* CART */}
 
@@ -246,32 +251,21 @@ export default function BuyerNavbar() {
                     className="header-icon cart-icon-wrapper"
                     title="Cart"
                 >
-
-                    <span>
-                        🛒
-                    </span>
-
+                    <span>🛒</span>
 
                     {cartCount > 0 && (
-
                         <span className="cart-badge">
                             {cartCount}
                         </span>
-
                     )}
-
                 </Link>
 
-
-                {/* =========================
-                    PROFILE
-                ========================= */}
+                {/* PROFILE */}
 
                 <div
                     className="profile-wrapper"
                     ref={profileRef}
                 >
-
 
                     <button
                         className="profile-button"
@@ -280,35 +274,22 @@ export default function BuyerNavbar() {
                             setProfileOpen(!profileOpen)
                         }
                     >
-
                         👤
-
 
                         <span>
                             {user?.first_name || "Profile"}
                         </span>
 
-
                         <span className="profile-arrow">
-
-                            {profileOpen
-                                ? "▴"
-                                : "▾"
-                            }
-
+                            {profileOpen ? "▴" : "▾"}
                         </span>
-
                     </button>
 
-
-                    {/* =========================
-                        PROFILE DROPDOWN
-                    ========================= */}
+                    {/* PROFILE DROPDOWN */}
 
                     {profileOpen && (
 
                         <div className="profile-dropdown">
-
 
                             {/* USER INFORMATION */}
 
@@ -318,85 +299,64 @@ export default function BuyerNavbar() {
                                     👤
                                 </div>
 
-
                                 <div className="profile-user-details">
 
                                     <strong>
-
                                         {user?.first_name
-                                            ? `${user.first_name} ${user.last_name || ""}`
+                                            ? `${user.first_name} ${user.last_name || ""}`.trim()
                                             : "Student"
                                         }
-
                                     </strong>
 
-
                                     <span>
-
                                         {user?.email || "No email"}
-
                                     </span>
 
                                 </div>
 
                             </div>
 
-
                             <div className="dropdown-divider"></div>
-
 
                             {/* PROFILE LINKS */}
 
                             <Link
-    to="/profile"
-    className="dropdown-item"
-    onClick={() =>
-        setProfileOpen(false)
-    }
->
-    <span>👤</span>
-    <span>My Profile</span>
-</Link>
+                                to="/profile"
+                                className="dropdown-item"
+                                onClick={() => setProfileOpen(false)}
+                            >
+                                <span>👤</span>
+                                <span>My Profile</span>
+                            </Link>
 
+                            <Link
+                                to="/orders"
+                                className="dropdown-item"
+                                onClick={() => setProfileOpen(false)}
+                            >
+                                <span>📦</span>
+                                <span>My Orders</span>
+                            </Link>
 
-<Link
-    to="/orders"
-    className="dropdown-item"
-    onClick={() =>
-        setProfileOpen(false)
-    }
->
-    <span>📦</span>
-    <span>My Orders</span>
-</Link>
+                            <Link
+                                to="/wishlist"
+                                className="dropdown-item"
+                                onClick={() => setProfileOpen(false)}
+                            >
+                                <span>❤️</span>
+                                <span>Wishlist</span>
+                            </Link>
 
-
-<Link
-    to="/wishlist"
-    className="dropdown-item"
-    onClick={() =>
-        setProfileOpen(false)
-    }
->
-    <span>❤️</span>
-    <span>Wishlist</span>
-</Link>
-
-
-<Link
-    to="/settings"
-    className="dropdown-item"
-    onClick={() =>
-        setProfileOpen(false)
-    }
->
-    <span>⚙️</span>
-    <span>Account Settings</span>
-</Link>
-
+                            <Link
+                                to="/settings"
+                                className="dropdown-item"
+                                onClick={() => setProfileOpen(false)}
+                            >
+                                <span>⚙️</span>
+                                <span>Account Settings</span>
+                            </Link>
 
                             <div className="dropdown-divider"></div>
-
 
                             {/* LOGOUT */}
 
@@ -405,20 +365,11 @@ export default function BuyerNavbar() {
                                 className="dropdown-item logout-item"
                                 onClick={handleLogout}
                             >
-
-                                <span>
-                                    🚪
-                                </span>
-
-                                <span>
-                                    Logout
-                                </span>
-
+                                <span>🚪</span>
+                                <span>Logout</span>
                             </button>
 
-
                         </div>
-
                     )}
 
                 </div>

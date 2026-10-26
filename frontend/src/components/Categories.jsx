@@ -1,3 +1,4 @@
+
 import {
     useEffect,
     useState
@@ -9,18 +10,11 @@ import {
 
 import "../styles/Categories.css";
 
-
 export default function Categories() {
 
-    const [categories, setCategories] =
-        useState([]);
-
-    const [loading, setLoading] =
-        useState(true);
-
-    const [error, setError] =
-        useState("");
-
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     useEffect(() => {
 
@@ -32,25 +26,16 @@ export default function Categories() {
                     "http://localhost:5000/api/categories"
                 );
 
-
-                const data =
-                    await response.json();
-
+                const data = await response.json();
 
                 if (!response.ok) {
-
                     throw new Error(
                         data.message ||
                         "Failed to load categories."
                     );
-
                 }
 
-
-                setCategories(
-                    data.categories || []
-                );
-
+                setCategories(data.categories || []);
 
             } catch (error) {
 
@@ -59,25 +44,18 @@ export default function Categories() {
                     error
                 );
 
-
-                setError(
-                    error.message
-                );
-
+                setError(error.message);
 
             } finally {
 
                 setLoading(false);
 
             }
-
         }
-
 
         fetchCategories();
 
     }, []);
-
 
     return (
 
@@ -90,16 +68,13 @@ export default function Categories() {
 
                 <div className="categories-header">
 
-                    <h2>
-                        Categories
-                    </h2>
+                    <h2>Categories</h2>
 
                     <p>
                         Find what you need from fellow university students.
                     </p>
 
                 </div>
-
 
                 {loading ? (
 
@@ -123,8 +98,7 @@ export default function Categories() {
 
                     <div className="categories-grid">
 
-                        {categories.map(
-                            (category) => (
+                        {categories.map((category) => (
 
                             <Link
                                 to={`/products?category=${encodeURIComponent(
@@ -135,24 +109,15 @@ export default function Categories() {
                             >
 
                                 <div className="category-icon">
-                                    {
-                                        category.icon ||
-                                        "🛍️"
-                                    }
+                                    {category.icon || "🛍️"}
                                 </div>
 
-
                                 <h3>
-                                    {
-                                        category.category_name
-                                    }
+                                    {category.category_name}
                                 </h3>
 
-
                                 <p className="category-description">
-                                    {
-                                        category.description
-                                    }
+                                    {category.description}
                                 </p>
 
                             </Link>
@@ -166,6 +131,5 @@ export default function Categories() {
             </div>
 
         </section>
-
     );
 }
