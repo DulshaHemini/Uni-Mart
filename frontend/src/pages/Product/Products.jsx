@@ -249,35 +249,46 @@ function ProductsContent({ categoryFromUrl, searchFromUrl }) {
     // CATEGORY FILTER CHANGE
     // =========================
 
-    const handleCategoryChange =
-        (categoryName) => {
+    const handleCategoryChange = (category) => {
+    const categoryId = String(category?._id ?? "");
+    const categoryName = String(
+        category?.category_name ?? ""
+    ).trim().toLowerCase();
 
-        setSelectedCategories(
-            (previousCategories) => {
+    setSelectedCategories((previousCategories) => {
+        const isSelected = previousCategories.some(
+            (value) => {
+                const selected = String(value);
 
-                if (
-                    previousCategories.includes(
-                        categoryName
+                return (
+                    selected === categoryId ||
+                    (
+                        categoryName &&
+                        selected.trim().toLowerCase() ===
+                            categoryName
                     )
-                ) {
-
-                    return previousCategories.filter(
-                        (category) =>
-                            category !== categoryName
-                    );
-
-                }
-
-
-                return [
-                    ...previousCategories,
-                    categoryName
-                ];
-
+                );
             }
         );
 
-    };
+        if (isSelected) {
+            return previousCategories.filter((value) => {
+                const selected = String(value);
+
+                return (
+                    selected !== categoryId &&
+                    (
+                        !categoryName ||
+                        selected.trim().toLowerCase() !==
+                            categoryName
+                    )
+                );
+            });
+        }
+
+        return [...previousCategories, categoryId];
+    });
+};
 
 
     // =========================
@@ -335,21 +346,40 @@ function ProductsContent({ categoryFromUrl, searchFromUrl }) {
 
 
             // CATEGORY
-            const productCategory =
-                product.category_id &&
-                typeof product.category_id === "object"
-                    ? product.category_id.category_name || ""
-                    : categories.find(
-                        (category) =>
-                            category._id === product.category_id
-                    )?.category_name || "";
+            // CATEGORY
 
+const populatedCategory =
+    product.category_id &&
+    typeof product.category_id === "object"
+        ? product.category_id
+        : null;
 
-            const matchesCategory =
-                selectedCategories.length === 0 ||
-                selectedCategories.includes(
-                    productCategory
-                );
+const productCategoryId = String(
+    populatedCategory?._id ??
+    product.category_id ??
+    ""
+);
+
+const productCategoryName = String(
+    populatedCategory?.category_name ??
+    categories.find(
+        (category) =>
+            String(category._id) === productCategoryId
+    )?.category_name ??
+    ""
+).trim().toLowerCase();
+
+const matchesCategory =
+    selectedCategories.length === 0 ||
+    selectedCategories.some((selected) => {
+        const selectedValue = String(selected);
+
+        return (
+            selectedValue === productCategoryId ||
+            selectedValue.trim().toLowerCase() ===
+                productCategoryName
+        );
+    });
 
 
             // CONDITION
@@ -657,17 +687,18 @@ function ProductsContent({ categoryFromUrl, searchFromUrl }) {
                                         >
 
                                             <input
-                                                type="checkbox"
-                                                checked={
-                                                    selectedCategories.includes(
-                                                        category.category_name
-                                                    )
-                                                }
-                                                onChange={() =>
-                                                    handleCategoryChange(
-                                                        category.category_name
-                                                    )
-                                                }
+                                                checked={selectedCategories.some((selected) => {
+                                                const selectedValue = String(selected);
+
+                                                return (
+                                                    selectedValue === String(category._id) ||
+                                                    selectedValue.trim().toLowerCase() ===
+                                                        String(category.category_name ?? "")
+                                                            .trim()
+                                                            .toLowerCase()
+                                                );
+                                            })}
+                                            onChange={() => handleCategoryChange(category)}
                                             />
 
 

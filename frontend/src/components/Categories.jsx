@@ -128,7 +128,7 @@ export default function Categories() {
 
                             <Link
                                 to={`/products?category=${encodeURIComponent(
-                                    category.category_name
+                                    category._id
                                 )}`}
                                 className="category-card"
                                 key={category._id}
