@@ -15,12 +15,20 @@ import ProtectedRoute from "./components/Product/ProtectedRoute.jsx";
 
 import BuyerHome from "./pages/Buyer/BuyerHome.jsx";
 import Cart from "./pages/Cart/Cart.jsx";
-import Profile from "./pages/Profile/Profile.jsx";
+import Profile from "./pages/Buyer/Profile.jsx";
 import Checkout from "./pages/Checkout/Checkout.jsx";
+import MyOrders from "./pages/Buyer/MyOrders.jsx";
+import Wishlist from "./pages/Buyer/Wishlist.jsx";
+import AccountSettings from "./pages/Buyer/AccountSettings.jsx";
+import Chat from "./pages/Buyer/Chat.jsx";
 
 import SellerDashboard from "./pages/Seller/SellerDashboard.jsx";
+import SellerProfile from "./pages/Seller/SellerProfile.jsx";
 import AddProduct from "./pages/Seller/AddProduct.jsx";
 import EditProduct from "./pages/Seller/EditProduct.jsx";
+import SellerSettings from "./pages/Seller/SellerSettings.jsx";
+import SellerOrders from "./pages/Seller/SellerOrders.jsx";
+import SellerSales from "./pages/Seller/SellerSales.jsx";
 
 import OrderConfirmation from "./pages/Payment/OrderConfirmation.jsx";
 import PaymentCancel from "./pages/Payment/PaymentCancel.jsx";
@@ -32,6 +40,9 @@ import AdminInventory from "./pages/Admin/AdminInventory.jsx";
 import AdminOrders from "./pages/Admin/AdminOrders.jsx";
 import AdminOrderDetails from "./pages/Admin/AdminOrderDetails.jsx";
 import AdminUsers from "./pages/Admin/AdminUsers.jsx";
+
+import NotFound from "./pages/NotFound.jsx";
+
 
 function App() {
 
@@ -138,6 +149,49 @@ function App() {
                     }
                 />
 
+                <Route
+                    path="/orders"
+                    element={
+                        <ProtectedRoute
+                            allowedRoles={["buyer"]}
+                        >
+                            <MyOrders />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/wishlist"
+                    element={
+                        <ProtectedRoute
+                            allowedRoles={["buyer"]}
+                        >
+                            <Wishlist />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/settings"
+                    element={
+                        <ProtectedRoute
+                            allowedRoles={["buyer"]}
+                        >
+                            <AccountSettings />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/chat"
+                    element={
+                        <ProtectedRoute
+                            allowedRoles={["buyer"]}
+                        >
+                            <Chat />
+                        </ProtectedRoute>
+                    }
+                />
 
                 {/* PAYMENT RESULT ROUTES */}
 
@@ -155,6 +209,8 @@ function App() {
                         <PaymentCancel />
                     }
                 />
+
+                
 
 
 
@@ -193,6 +249,50 @@ function App() {
                             allowedRoles={["seller"]}
                         >
                             <EditProduct />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/seller/profile"
+                    element={
+                        <ProtectedRoute
+                            allowedRoles={["seller"]}
+                        >
+                            <SellerProfile />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/seller/settings"
+                    element={
+                        <ProtectedRoute
+                            allowedRoles={["seller"]}
+                        >
+                            <SellerSettings />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/seller/orders"
+                    element={
+                        <ProtectedRoute
+                            allowedRoles={["seller"]}
+                        >
+                            <SellerOrders />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/seller/sales"
+                    element={
+                        <ProtectedRoute
+                            allowedRoles={["seller"]}
+                        >
+                            <SellerSales />
                         </ProtectedRoute>
                     }
                 />
@@ -266,6 +366,11 @@ function App() {
                             <AdminUsers />
                         </ProtectedRoute>
                     }
+                />
+
+                <Route
+                    path="*"
+                    element={<NotFound />}
                 />
 
             </Routes>

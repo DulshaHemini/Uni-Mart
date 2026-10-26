@@ -1,0 +1,277 @@
+.seller-sales-page {
+    width: 100%;
+    max-width: 1400px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.seller-sales-header {
+    margin-bottom: 30px;
+}
+
+.seller-sales-header h1 {
+    margin: 0;
+
+    color: var(--primary-blue);
+
+    font-size: 30px;
+}
+
+.seller-sales-header p {
+    margin-top: 7px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+.seller-sales-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+
+    margin-bottom: 30px;
+}
+
+.seller-sales-stat-card {
+    background-color: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-radius: 12px;
+
+    padding: 22px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.seller-sales-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background-color: var(--light-gray);
+
+    font-size: 22px;
+}
+
+.seller-sales-stat-card p {
+    margin: 0 0 6px;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+.seller-sales-stat-card h2 {
+    margin: 0;
+
+    color: var(--primary-blue);
+
+    font-size: 22px;
+}
+
+
+/* =========================
+   SALES HISTORY
+========================= */
+
+.seller-sales-history {
+    background-color: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-radius: 12px;
+
+    padding: 26px;
+}
+
+.seller-sales-section-header h2 {
+    margin: 0;
+
+    color: var(--primary-blue);
+
+    font-size: 21px;
+}
+
+.seller-sales-section-header p {
+    margin-top: 6px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   SALES LIST
+========================= */
+
+.seller-sales-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-top: 22px;
+}
+
+.seller-sale-row {
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        1fr
+        1fr;
+
+    gap: 20px;
+
+    align-items: center;
+
+    padding: 18px;
+
+    border: 1px solid var(--border-gray);
+    border-radius: 9px;
+}
+
+.seller-sale-row div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.seller-sale-row span {
+    color: #6b7280;
+
+    font-size: 12px;
+}
+
+.seller-sale-row strong {
+    color: #111827;
+
+    font-size: 14px;
+}
+
+.seller-sale-amount {
+    color: var(--primary-orange) !important;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.seller-sale-status {
+    width: fit-content;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    text-transform: capitalize;
+}
+
+.seller-sale-status.paid {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+.seller-sale-status.processing {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.seller-sale-status.shipped {
+    background-color: #ede9fe;
+    color: #7c3aed;
+}
+
+.seller-sale-status.completed {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+
+/* =========================
+   EMPTY / MESSAGE
+========================= */
+
+.seller-sales-empty,
+.seller-sales-message,
+.seller-sales-error {
+    padding: 40px 20px;
+
+    text-align: center;
+
+    color: #6b7280;
+}
+
+.seller-sales-error {
+    color: #dc2626;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+    .seller-sales-stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .seller-sale-row {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .seller-sales-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .seller-sale-row {
+        grid-template-columns: 1fr;
+    }
+
+    .seller-sales-history {
+        padding: 20px;
+    }
+
+    .seller-sales-header h1 {
+        font-size: 26px;
+    }
+
+}

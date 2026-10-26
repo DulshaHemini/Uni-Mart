@@ -1,17 +1,40 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {
+    useEffect,
+    useState
+} from "react";
 
-import Notification from "../../components/Notification.jsx";
-import Footer from "../../components/Footer";
-import SellerNavbar from "../../components/Seller/SellerNavbar.jsx";
+import {
+    Link
+} from "react-router-dom";
+
+import Notification
+    from "../../components/Notification.jsx";
+
+import SellerLayout
+    from "../../components/Seller/SellerLayout.jsx";
 
 import "../../styles/Seller/SellerDashboard.css";
 
+
+
 export default function SellerDashboard() {
 
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    // =========================
+    // STATES
+    // =========================
+
+    const [products, setProducts] =
+        useState([]);
+
+    const [sellerOrders, setSellerOrders] =
+        useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [error, setError] =
+        useState("");
+
 
     const [
         productToDelete,
@@ -19,15 +42,28 @@ export default function SellerDashboard() {
     ] = useState(null);
 
 
+    // =========================
+    // CURRENT USER
+    // =========================
+
     const user = JSON.parse(
         localStorage.getItem("user")
     );
+
+
+    const token =
+        localStorage.getItem("token");
+
 
     const sellerId =
         user?.user_id ||
         user?._id ||
         user?.id;
 
+
+    // =========================
+    // GET SELLER PRODUCTS
+    // =========================
 
     useEffect(() => {
 
@@ -51,7 +87,9 @@ export default function SellerDashboard() {
                     `http://localhost:5000/api/products/seller/${sellerId}`
                 );
 
-                const data = await response.json();
+
+                const data =
+                    await response.json();
 
 
                 if (!response.ok) {
@@ -68,13 +106,19 @@ export default function SellerDashboard() {
                     data.products || []
                 );
 
+
             } catch (error) {
 
-                console.log(error);
+                console.error(
+                    "Seller products error:",
+                    error
+                );
+
 
                 setError(
                     "Failed to load seller products."
                 );
+
 
             } finally {
 
@@ -90,7 +134,103 @@ export default function SellerDashboard() {
     }, [sellerId]);
 
 
-    const handleDeleteProduct = async () => {
+    // =========================
+    // GET SELLER ORDERS
+    // =========================
+
+    useEffect(() => {
+
+        const fetchSellerOrders =
+            async () => {
+
+            if (!token) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/orders/seller-orders",
+                        {
+                            headers: {
+                                Authorization:
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load seller orders."
+                    );
+
+                }
+
+
+                setSellerOrders(
+                    data.orders || []
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Seller order statistics error:",
+                    error
+                );
+
+            }
+
+        };
+
+
+        fetchSellerOrders();
+
+    }, [token]);
+
+
+    // =========================
+    // STATISTICS
+    // =========================
+
+    const totalOrders =
+        sellerOrders.length;
+
+
+    const totalSales =
+        sellerOrders
+            .filter(
+                (order) =>
+                    order.order_status === "paid" ||
+                    order.order_status === "processing" ||
+                    order.order_status === "shipped" ||
+                    order.order_status === "completed"
+            )
+            .reduce(
+                (total, order) =>
+                    total +
+                    Number(
+                        order.seller_total || 0
+                    ),
+                0
+            );
+
+
+    // =========================
+    // DELETE PRODUCT
+    // =========================
+
+    const handleDeleteProduct =
+        async () => {
 
         if (!productToDelete) {
             return;
@@ -99,14 +239,17 @@ export default function SellerDashboard() {
 
         try {
 
-            const response = await fetch(
-                `http://localhost:5000/api/products/${productToDelete}`,
-                {
-                    method: "DELETE"
-                }
-            );
+            const response =
+                await fetch(
+                    `http://localhost:5000/api/products/${productToDelete}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
 
-            const data = await response.json();
+
+            const data =
+                await response.json();
 
 
             if (!response.ok) {
@@ -119,19 +262,26 @@ export default function SellerDashboard() {
             }
 
 
-            setProducts((previousProducts) =>
-                previousProducts.filter(
-                    (product) =>
-                        product._id !== productToDelete
-                )
+            setProducts(
+                (previousProducts) =>
+                    previousProducts.filter(
+                        (product) =>
+                            product._id !==
+                            productToDelete
+                    )
             );
 
 
             setProductToDelete(null);
 
+
         } catch (error) {
 
-            console.log(error);
+            console.error(
+                "Delete product error:",
+                error
+            );
+
 
             setProductToDelete(null);
 
@@ -139,365 +289,313 @@ export default function SellerDashboard() {
 
     };
 
-
     return (
-        <>
 
-            <div className="seller-dashboard-page">
+    <>
 
-                <SellerNavbar />
+        <SellerLayout>
 
-
-                <div className="seller-dashboard-layout">
-
-                    {/* Sidebar */}
-                    <aside className="seller-sidebar">
-
-                        <h3 className="seller-sidebar-title">
-                            SELLER PANEL
-                        </h3>
+            <div className="seller-dashboard-main">
 
 
-                        <nav className="seller-sidebar-menu">
+                {/* =========================
+                    HEADER
+                ========================= */}
 
-                            <Link
-                                to="/seller/dashboard"
-                                className="seller-menu-link active"
-                            >
-                                <span>📊</span>
-                                Dashboard
-                            </Link>
+                <div className="seller-dashboard-heading">
+
+                    <div>
+
+                        <h1>
+                            Seller Dashboard
+                        </h1>
+
+                        <p>
+                            Manage your products,
+                            orders and sales.
+                        </p>
+
+                    </div>
 
 
-                            <a
-                                href="#seller-products"
-                                className="seller-menu-link"
-                            >
-                                <span>📦</span>
+                    <Link
+                        to="/seller/add-product"
+                        className="seller-main-add-button"
+                    >
+                        + Add Product
+                    </Link>
+
+                </div>
+
+
+                {/* =========================
+                    STATISTICS
+                ========================= */}
+
+                <section className="seller-stats">
+
+
+                    <div className="seller-stat-card">
+
+                        <div className="seller-stat-icon">
+                            📦
+                        </div>
+
+                        <div>
+
+                            <p>
                                 Products
-                            </a>
+                            </p>
+
+                            <h2>
+                                {products.length}
+                            </h2>
+
+                        </div>
+
+                    </div>
 
 
-                            <button
-                                type="button"
-                                className="seller-menu-link seller-menu-button"
-                            >
-                                <span>🛒</span>
+                    <div className="seller-stat-card">
+
+                        <div className="seller-stat-icon">
+                            🛒
+                        </div>
+
+                        <div>
+
+                            <p>
                                 Orders
-                            </button>
+                            </p>
+
+                            <h2>
+                                {totalOrders}
+                            </h2>
+
+                        </div>
+
+                    </div>
 
 
-                            <button
-                                type="button"
-                                className="seller-menu-link seller-menu-button"
-                            >
-                                <span>💰</span>
-                                Sales
-                            </button>
+                    <div className="seller-stat-card">
 
-                        </nav>
+                        <div className="seller-stat-icon">
+                            💰
+                        </div>
 
-                    </aside>
+                        <div>
+
+                            <p>
+                                Total Sales
+                            </p>
+
+                            <h2>
+                                Rs.{" "}
+                                {totalSales.toLocaleString()}
+                            </h2>
+
+                        </div>
+
+                    </div>
 
 
-                    {/* Main Content */}
-                    <main className="seller-dashboard-main">
+                </section>
 
-                        <div className="seller-dashboard-heading">
 
-                            <div>
+                {/* =========================
+                    PRODUCTS SECTION
+                ========================= */}
 
-                                <h1>
-                                    Seller Dashboard
-                                </h1>
+                <section
+                    className="seller-products-section"
+                    id="seller-products"
+                >
 
-                                <p>
-                                    Manage your products,
-                                    orders and sales.
-                                </p>
+                    <div className="seller-section-header">
 
+                        <div>
+
+                            <h2>
+                                My Products
+                            </h2>
+
+                            <p>
+                                Manage products you have
+                                listed on UniMart.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {loading ? (
+
+                        <div className="seller-empty-products">
+
+                            <p>
+                                Loading products...
+                            </p>
+
+                        </div>
+
+                    ) : error ? (
+
+                        <div className="seller-empty-products">
+
+                            <p>
+                                {error}
+                            </p>
+
+                        </div>
+
+                    ) : products.length === 0 ? (
+
+                        <div className="seller-empty-products">
+
+                            <div className="seller-empty-icon">
+                                📦
                             </div>
 
+                            <h3>
+                                No products yet
+                            </h3>
+
+                            <p>
+                                Start selling by adding
+                                your first product.
+                            </p>
 
                             <Link
                                 to="/seller/add-product"
-                                className="seller-main-add-button"
+                                className="seller-empty-add-button"
                             >
-                                + Add Product
+                                Add Product
                             </Link>
 
                         </div>
 
+                    ) : (
 
-                        {/* Statistics */}
-                        <section className="seller-stats">
+                        <div className="seller-products-list">
 
-                            {/* Products */}
-                            <div className="seller-stat-card">
+                            {products.map(
+                                (product) => (
 
-                                <div className="seller-stat-icon">
-                                    📦
-                                </div>
-
-                                <div>
-
-                                    <p>
-                                        Products
-                                    </p>
-
-                                    <h2>
-                                        {products.length}
-                                    </h2>
-
-                                </div>
-
-                            </div>
+                                <div
+                                    className="seller-product-row"
+                                    key={product._id}
+                                >
 
 
-                            {/* Orders */}
-                            <div className="seller-stat-card">
+                                    <div className="seller-product-info">
 
-                                <div className="seller-stat-icon">
-                                    🛒
-                                </div>
+                                        <h3>
+                                            {
+                                                product.product_name
+                                            }
+                                        </h3>
 
-                                <div>
+                                        <p>
 
-                                    <p>
-                                        Orders
-                                    </p>
+                                            {
+                                                product.category_id
+                                                    ?.category_name
+                                            }
 
-                                    <h2>
-                                        0
-                                    </h2>
+                                            {" • "}
 
-                                </div>
+                                            {
+                                                product.condition
+                                            }
 
-                            </div>
+                                            {" • "}
 
+                                            Stock:{" "}
 
-                            {/* Sales */}
-                            <div className="seller-stat-card">
+                                            {
+                                                product.stock_quantity
+                                            }
 
-                                <div className="seller-stat-icon">
-                                    💰
-                                </div>
+                                        </p>
 
-                                <div>
-
-                                    <p>
-                                        Total Sales
-                                    </p>
-
-                                    <h2>
-                                        Rs. 0
-                                    </h2>
-
-                                </div>
-
-                            </div>
-
-                        </section>
-
-
-                        {/* Products Section */}
-                        <section
-                            className="seller-products-section"
-                            id="seller-products"
-                        >
-
-                            <div className="seller-section-header">
-
-                                <div>
-
-                                    <h2>
-                                        My Products
-                                    </h2>
-
-                                    <p>
-                                        Manage products you have
-                                        listed on UniMart.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            {/* Loading */}
-                            {loading ? (
-
-                                <div className="seller-empty-products">
-
-                                    <p>
-                                        Loading products...
-                                    </p>
-
-                                </div>
-
-                            ) : error ? (
-
-                                /* Error */
-                                <div className="seller-empty-products">
-
-                                    <p>
-                                        {error}
-                                    </p>
-
-                                </div>
-
-                            ) : products.length === 0 ? (
-
-                                /* No Products */
-                                <div className="seller-empty-products">
-
-                                    <div className="seller-empty-icon">
-                                        📦
                                     </div>
 
-                                    <h3>
-                                        No products yet
-                                    </h3>
 
-                                    <p>
-                                        Start selling by adding
-                                        your first product.
-                                    </p>
+                                    <div className="seller-product-price">
 
-                                    <Link
-                                        to="/seller/add-product"
-                                        className="seller-empty-add-button"
-                                    >
-                                        Add Product
-                                    </Link>
+                                        Rs.{" "}
 
-                                </div>
+                                        {Number(
+                                            product.price
+                                        ).toLocaleString()}
 
-                            ) : (
+                                    </div>
 
-                                /* Product List */
-                                <div className="seller-products-list">
 
-                                    {products.map((product) => (
+                                    <div className="seller-product-actions">
 
-                                        <div
-                                            className="seller-product-row"
-                                            key={product._id}
+                                        <Link
+                                            to={`/products/${product._id}`}
+                                            className="seller-product-action view"
                                         >
-
-                                            {/* Product Info */}
-                                            <div className="seller-product-info">
-
-                                                <h3>
-                                                    {
-                                                        product.product_name
-                                                    }
-                                                </h3>
-
-                                                <p>
-
-                                                    {
-                                                        product.category_id
-                                                            ?.category_name
-                                                    }
-
-                                                    {" • "}
-
-                                                    {
-                                                        product.condition
-                                                    }
-
-                                                    {" • "}
-
-                                                    Stock:{" "}
-                                                    {
-                                                        product.stock_quantity
-                                                    }
-
-                                                </p>
-
-                                            </div>
+                                            View
+                                        </Link>
 
 
-                                            {/* Price */}
-                                            <div className="seller-product-price">
-
-                                                Rs.{" "}
-
-                                                {Number(
-                                                    product.price
-                                                ).toLocaleString()}
-
-                                            </div>
+                                        <Link
+                                            to={`/seller/edit-product/${product._id}`}
+                                            className="seller-product-action edit"
+                                        >
+                                            Edit
+                                        </Link>
 
 
-                                            {/* Actions */}
-                                            <div className="seller-product-actions">
+                                        <button
+                                            type="button"
+                                            className="seller-product-action delete"
+                                            onClick={() =>
+                                                setProductToDelete(
+                                                    product._id
+                                                )
+                                            }
+                                        >
+                                            Delete
+                                        </button>
 
-                                                <Link
-                                                    to={`/products/${product._id}`}
-                                                    className="seller-product-action view"
-                                                >
-                                                    View
-                                                </Link>
-
-
-                                                <Link
-                                                    to={`/seller/edit-product/${product._id}`}
-                                                    className="seller-product-action edit"
-                                                >
-                                                    Edit
-                                                </Link>
-
-
-                                                <button
-                                                    type="button"
-                                                    className="seller-product-action delete"
-                                                    onClick={() =>
-                                                        setProductToDelete(
-                                                            product._id
-                                                        )
-                                                    }
-                                                >
-                                                    Delete
-                                                </button>
-
-                                            </div>
-
-                                        </div>
-
-                                    ))}
+                                    </div>
 
                                 </div>
 
-                            )}
+                            ))}
 
-                        </section>
+                        </div>
 
-                    </main>
+                    )}
 
-                </div>
+                </section>
 
             </div>
 
-
-            {/* Delete Confirmation */}
-            {productToDelete && (
-
-                <Notification
-                    type="confirm"
-                    message="Are you sure you want to delete this product?"
-                    onConfirm={handleDeleteProduct}
-                    onCancel={() =>
-                        setProductToDelete(null)
-                    }
-                />
-
-            )}
+        </SellerLayout>
 
 
-            <Footer />
+        {productToDelete && (
 
-        </>
-    );
+            <Notification
+                type="confirm"
+                message="Are you sure you want to delete this product?"
+                onConfirm={
+                    handleDeleteProduct
+                }
+                onCancel={() =>
+                    setProductToDelete(null)
+                }
+            />
+
+        )}
+
+    </>
+
+);
 }

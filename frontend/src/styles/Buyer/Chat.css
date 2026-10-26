@@ -1,0 +1,104 @@
+.buyer-chat-page {
+    min-height: calc(100vh - 140px);
+
+    background-color: var(--light-gray);
+
+    padding: 50px 20px;
+}
+
+
+.buyer-chat-container {
+    width: 100%;
+    max-width: 900px;
+
+    margin: 0 auto;
+}
+
+
+.buyer-chat-card {
+    background-color: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-radius: 14px;
+
+    padding: 60px 30px;
+
+    text-align: center;
+}
+
+
+.buyer-chat-icon {
+    font-size: 55px;
+
+    margin-bottom: 18px;
+}
+
+
+.buyer-chat-card h1 {
+    margin: 0;
+
+    color: var(--primary-blue);
+
+    font-size: 30px;
+}
+
+
+.buyer-chat-card p {
+    margin: 12px auto 28px;
+
+    max-width: 500px;
+
+    color: #6b7280;
+
+    line-height: 1.6;
+}
+
+
+.buyer-chat-notice {
+    max-width: 520px;
+
+    margin: 0 auto;
+
+    padding: 18px;
+
+    background-color: #fff7ed;
+
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.buyer-chat-notice strong {
+    color: var(--primary-orange);
+}
+
+
+.buyer-chat-notice span {
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+@media (max-width: 600px) {
+
+    .buyer-chat-page {
+        padding: 30px 16px;
+    }
+
+
+    .buyer-chat-card {
+        padding: 40px 20px;
+    }
+
+
+    .buyer-chat-card h1 {
+        font-size: 25px;
+    }
+
+}

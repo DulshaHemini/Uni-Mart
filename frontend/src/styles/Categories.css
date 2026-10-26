@@ -81,3 +81,27 @@ padding: 50px 20px;
 }
 
 }
+
+.categories-message {
+    text-align: center;
+    color: #6b7280;
+    padding: 25px 0;
+}
+
+.categories-error {
+    text-align: center;
+    color: #dc2626;
+    padding: 25px 0;
+}
+
+.category-description {
+    margin-top: 8px;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    text-align: center;
+}

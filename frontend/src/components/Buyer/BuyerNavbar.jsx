@@ -230,13 +230,13 @@ export default function BuyerNavbar() {
 
                 {/* WISHLIST */}
 
-                <button
+                                <Link
+                    to="/wishlist"
                     className="header-icon"
-                    type="button"
                     title="Wishlist"
                 >
                     ♡
-                </button>
+                </Link>
 
 
                 {/* CART */}
@@ -348,79 +348,51 @@ export default function BuyerNavbar() {
                             {/* PROFILE LINKS */}
 
                             <Link
-                                to="/profile"
-                                className="dropdown-item"
-                                onClick={() =>
-                                    setProfileOpen(false)
-                                }
-                            >
-
-                                <span>
-                                    👤
-                                </span>
-
-                                <span>
-                                    My Profile
-                                </span>
-
-                            </Link>
+    to="/profile"
+    className="dropdown-item"
+    onClick={() =>
+        setProfileOpen(false)
+    }
+>
+    <span>👤</span>
+    <span>My Profile</span>
+</Link>
 
 
-                            <Link
-                                to="/orders"
-                                className="dropdown-item"
-                                onClick={() =>
-                                    setProfileOpen(false)
-                                }
-                            >
-
-                                <span>
-                                    📦
-                                </span>
-
-                                <span>
-                                    My Orders
-                                </span>
-
-                            </Link>
+<Link
+    to="/orders"
+    className="dropdown-item"
+    onClick={() =>
+        setProfileOpen(false)
+    }
+>
+    <span>📦</span>
+    <span>My Orders</span>
+</Link>
 
 
-                            <Link
-                                to="/wishlist"
-                                className="dropdown-item"
-                                onClick={() =>
-                                    setProfileOpen(false)
-                                }
-                            >
-
-                                <span>
-                                    ❤️
-                                </span>
-
-                                <span>
-                                    Wishlist
-                                </span>
-
-                            </Link>
+<Link
+    to="/wishlist"
+    className="dropdown-item"
+    onClick={() =>
+        setProfileOpen(false)
+    }
+>
+    <span>❤️</span>
+    <span>Wishlist</span>
+</Link>
 
 
-                            <Link
-                                to="/settings"
-                                className="dropdown-item"
-                                onClick={() =>
-                                    setProfileOpen(false)
-                                }
-                            >
-
-                                <span>
-                                    ⚙️
-                                </span>
-
-                                <span>
-                                    Account Settings
-                                </span>
-
-                            </Link>
+<Link
+    to="/settings"
+    className="dropdown-item"
+    onClick={() =>
+        setProfileOpen(false)
+    }
+>
+    <span>⚙️</span>
+    <span>Account Settings</span>
+</Link>
 
 
                             <div className="dropdown-divider"></div>

@@ -1,0 +1,356 @@
+.account-settings-page {
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.account-settings-container {
+    width: min(
+        1000px,
+        calc(100% - 40px)
+    );
+
+    margin: 0 auto;
+
+    padding: 40px 0 60px;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.settings-heading {
+    margin-bottom: 30px;
+}
+
+.settings-heading h1 {
+    margin-bottom: 8px;
+
+    color: #1E2B60;
+
+    font-size: 32px;
+}
+
+.settings-heading p {
+    color: #64748b;
+
+    font-size: 15px;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.settings-loading {
+    padding: 35px;
+
+    background: white;
+
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+
+    text-align: center;
+
+    color: #64748b;
+}
+
+
+/* =========================
+   SETTINGS CARD
+========================= */
+
+.settings-card {
+    margin-bottom: 25px;
+
+    padding: 28px;
+
+    background: white;
+
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(15, 23, 42, 0.05);
+}
+
+.settings-card h2 {
+    margin-bottom: 22px;
+
+    color: #1E2B60;
+
+    font-size: 20px;
+}
+
+
+/* =========================
+   FORM GRID
+========================= */
+
+.settings-form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+.settings-password-fields {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+
+/* =========================
+   FIELD
+========================= */
+
+.settings-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.settings-field label {
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.settings-field input {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+.settings-field input:focus {
+    border-color: #1E2B60;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(30, 43, 96, 0.08);
+}
+
+.settings-field input:disabled {
+    background: #F3F4F6;
+
+    color: #6B7280;
+
+    cursor: not-allowed;
+}
+
+.settings-field small {
+    color: #94A3B8;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.settings-save-button,
+.settings-password-button {
+    margin-top: 24px;
+
+    padding: 11px 20px;
+
+    border: none;
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.settings-save-button {
+    background: #1E2B60;
+
+    color: white;
+}
+
+.settings-save-button:hover {
+    background: #16204a;
+}
+
+.settings-password-button {
+    background: #F97316;
+
+    color: white;
+}
+
+.settings-password-button:hover {
+    background: #ea580c;
+}
+
+.settings-save-button:disabled,
+.settings-password-button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 800px) {
+
+    .settings-password-fields {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .account-settings-container {
+        width: calc(100% - 24px);
+
+        padding-top: 25px;
+    }
+
+    .settings-heading h1 {
+        font-size: 26px;
+    }
+
+    .settings-card {
+        padding: 20px;
+    }
+
+    .settings-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-save-button,
+    .settings-password-button {
+        width: 100%;
+    }
+
+}
+
+/* =========================
+   SETTINGS CARD HEADER
+========================= */
+
+.settings-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 24px;
+}
+
+.settings-card-header h2 {
+    margin-bottom: 6px;
+}
+
+.settings-card-header p {
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+.settings-security-icon {
+    font-size: 30px;
+}
+
+
+/* =========================
+   SECURITY INFORMATION
+========================= */
+
+.settings-security-info {
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+.security-info-item {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 14px;
+
+    padding: 16px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.security-info-icon {
+    font-size: 24px;
+}
+
+.security-info-item strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #1E2B60;
+}
+
+.security-info-item p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .settings-card-header {
+        align-items: flex-start;
+    }
+
+    .settings-security-icon {
+        font-size: 26px;
+    }
+
+}

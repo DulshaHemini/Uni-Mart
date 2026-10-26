@@ -1,54 +1,114 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+    Link,
+    useNavigate
+} from "react-router-dom";
+
 import "../styles/Navbar.css";
 
 export default function Navbar() {
 
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [menuOpen, setMenuOpen] =
+        useState(false);
+
+    const [searchTerm, setSearchTerm] =
+        useState("");
+
+    const navigate = useNavigate();
+
+
+    // =========================
+    // SEARCH PRODUCTS
+    // =========================
+
+    const handleSearch = (e) => {
+
+        e.preventDefault();
+
+        const search =
+            searchTerm.trim();
+
+        if (!search) {
+            return;
+        }
+
+        navigate(
+            `/products?search=${encodeURIComponent(search)}`
+        );
+
+        setMenuOpen(false);
+
+    };
+
 
     return (
         <nav className="navbar">
 
-            {/* Logo */}
+            {/* LOGO */}
 
-            <Link to="/" className="navbar-logo">
-                <span className="logo-uni">Uni</span>
-                <span className="logo-mart">Mart</span>
+            <Link
+                to="/"
+                className="navbar-logo"
+            >
+                <span className="logo-uni">
+                    Uni
+                </span>
+
+                <span className="logo-mart">
+                    Mart
+                </span>
             </Link>
 
 
-            {/* Desktop Navigation */}
+            {/* DESKTOP NAVIGATION */}
 
             <div className="desktop-nav">
 
-                <Link to="/">Home</Link>
+                <Link to="/">
+                    Home
+                </Link>
 
-                <Link to="/products">Products</Link>
+                <Link to="/products">
+                    Products
+                </Link>
 
-                <a href="/#categories">Categories</a>
+                <a href="/#categories">
+                    Categories
+                </a>
 
             </div>
 
 
-            {/* Desktop Actions */}
+            {/* DESKTOP ACTIONS */}
 
             <div className="desktop-actions">
 
-                {/* Search */}
+                {/* SEARCH */}
 
-                <div className="navbar-search">
+                <form
+                    className="navbar-search"
+                    onSubmit={handleSearch}
+                >
 
-                    <span>🔍</span>
+                    <span>
+                        🔍
+                    </span>
 
                     <input
                         type="text"
                         placeholder="Search products..."
+                        value={searchTerm}
+                        onChange={(e) =>
+                            setSearchTerm(
+                                e.target.value
+                            )
+                        }
                     />
 
-                </div>
+                </form>
 
 
-                {/* Login */}
+                {/* LOGIN */}
 
                 <Link
                     to="/login"
@@ -58,7 +118,7 @@ export default function Navbar() {
                 </Link>
 
 
-                {/* Register */}
+                {/* REGISTER */}
 
                 <Link
                     to="/register"
@@ -70,18 +130,22 @@ export default function Navbar() {
             </div>
 
 
-            {/* Mobile Menu Button */}
+            {/* MOBILE MENU BUTTON */}
 
             <button
                 className="mobile-menu-button"
-                onClick={() => setMenuOpen(!menuOpen)}
+                onClick={() =>
+                    setMenuOpen(
+                        !menuOpen
+                    )
+                }
                 aria-label="Toggle navigation menu"
             >
                 {menuOpen ? "✕" : "☰"}
             </button>
 
 
-            {/* Mobile Menu */}
+            {/* MOBILE MENU */}
 
             {menuOpen && (
 
@@ -89,57 +153,78 @@ export default function Navbar() {
 
                     <Link
                         to="/"
-                        onClick={() => setMenuOpen(false)}
+                        onClick={() =>
+                            setMenuOpen(false)
+                        }
                     >
                         Home
                     </Link>
 
                     <Link
                         to="/products"
-                        onClick={() => setMenuOpen(false)}
+                        onClick={() =>
+                            setMenuOpen(false)
+                        }
                     >
                         Products
                     </Link>
 
                     <a
                         href="/#categories"
-                        onClick={() => setMenuOpen(false)}
+                        onClick={() =>
+                            setMenuOpen(false)
+                        }
                     >
                         Categories
                     </a>
 
 
-                    {/* Mobile Search */}
+                    {/* MOBILE SEARCH */}
 
-                    <div className="mobile-search">
+                    <form
+                        className="mobile-search"
+                        onSubmit={handleSearch}
+                    >
 
-                        <span>🔍</span>
+                        <span>
+                            🔍
+                        </span>
 
                         <input
                             type="text"
                             placeholder="Search products..."
+                            value={searchTerm}
+                            onChange={(e) =>
+                                setSearchTerm(
+                                    e.target.value
+                                )
+                            }
                         />
 
-                    </div>
+                    </form>
 
 
-                    {/* Mobile Login */}
+                    {/* MOBILE LOGIN */}
 
                     <Link
                         to="/login"
                         className="mobile-auth-button"
-                        onClick={() => setMenuOpen(false)}
+                        onClick={() =>
+                            setMenuOpen(false)
+                        }
                     >
                         Login
                     </Link>
 
 
-                    {/* Mobile Register */}
+                    {/* MOBILE REGISTER */}
 
                     <Link
                         to="/register"
                         className="mobile-auth-button"
-                        onClick={() => setMenuOpen(false)}
+                        onClick={() =>
+                            setMenuOpen(false)
+                        }
                     >
                         Register
                     </Link>

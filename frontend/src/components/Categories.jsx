@@ -1,20 +1,25 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {
+    useEffect,
+    useState
+} from "react";
+
+import {
+    Link
+} from "react-router-dom";
 
 import "../styles/Categories.css";
 
+
 export default function Categories() {
 
-    const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [categories, setCategories] =
+        useState([]);
 
+    const [loading, setLoading] =
+        useState(true);
 
-    const categoryIcons = {
-        Books: "📚",
-        Electronics: "💻",
-        Clothing: "👕",
-        Stationery: "✏️"
-    };
+    const [error, setError] =
+        useState("");
 
 
     useEffect(() => {
@@ -27,25 +32,38 @@ export default function Categories() {
                     "http://localhost:5000/api/categories"
                 );
 
-                const data = await response.json();
+
+                const data =
+                    await response.json();
+
 
                 if (!response.ok) {
+
                     throw new Error(
                         data.message ||
                         "Failed to load categories."
                     );
+
                 }
+
 
                 setCategories(
                     data.categories || []
                 );
 
+
             } catch (error) {
 
-                console.log(
+                console.error(
                     "Category fetch error:",
                     error
                 );
+
+
+                setError(
+                    error.message
+                );
+
 
             } finally {
 
@@ -55,12 +73,14 @@ export default function Categories() {
 
         }
 
+
         fetchCategories();
 
     }, []);
 
 
     return (
+
         <section
             id="categories"
             className="categories-section"
@@ -83,15 +103,28 @@ export default function Categories() {
 
                 {loading ? (
 
-                    <p>
+                    <p className="categories-message">
                         Loading categories...
+                    </p>
+
+                ) : error ? (
+
+                    <p className="categories-error">
+                        {error}
+                    </p>
+
+                ) : categories.length === 0 ? (
+
+                    <p className="categories-message">
+                        No categories available.
                     </p>
 
                 ) : (
 
                     <div className="categories-grid">
 
-                        {categories.map((category) => (
+                        {categories.map(
+                            (category) => (
 
                             <Link
                                 to={`/products?category=${encodeURIComponent(
@@ -102,18 +135,25 @@ export default function Categories() {
                             >
 
                                 <div className="category-icon">
-
                                     {
-                                        categoryIcons[
-                                            category.category_name
-                                        ] || "🛍️"
+                                        category.icon ||
+                                        "🛍️"
                                     }
-
                                 </div>
 
+
                                 <h3>
-                                    {category.category_name}
+                                    {
+                                        category.category_name
+                                    }
                                 </h3>
+
+
+                                <p className="category-description">
+                                    {
+                                        category.description
+                                    }
+                                </p>
 
                             </Link>
 
@@ -126,5 +166,6 @@ export default function Categories() {
             </div>
 
         </section>
+
     );
 }

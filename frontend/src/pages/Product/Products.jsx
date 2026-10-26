@@ -1,73 +1,169 @@
-import { useEffect, useState } from "react";
+import {
+    useEffect,
+    useState
+} from "react";
+
 import {
     Link,
     useSearchParams
 } from "react-router-dom";
 
-import Navbar from "../../components/Navbar.jsx";
-import BuyerNavbar from "../../components/Buyer/BuyerNavbar.jsx";
-import Footer from "../../components/Footer.jsx";
+import Navbar
+    from "../../components/Navbar.jsx";
+
+import BuyerNavbar
+    from "../../components/Buyer/BuyerNavbar.jsx";
+
+import Footer
+    from "../../components/Footer.jsx";
+
+import Notification
+    from "../../components/Notification.jsx";
 
 import "../../styles/Products/Products.css";
 
 
 export default function Products() {
 
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    // =========================
+    // STATES
+    // =========================
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCategories, setSelectedCategories] = useState([]);
-    const [selectedConditions, setSelectedConditions] = useState([]);
-    const [sortOption, setSortOption] = useState("latest");
+    const [products, setProducts] =
+        useState([]);
 
-    const [searchParams] = useSearchParams();
+    const [categories, setCategories] =
+        useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [error, setError] =
+        useState("");
+
+    const [searchTerm, setSearchTerm] =
+        useState("");
+
+    const [
+        selectedCategories,
+        setSelectedCategories
+    ] = useState([]);
+
+    const [
+        selectedConditions,
+        setSelectedConditions
+    ] = useState([]);
+
+    const [sortOption, setSortOption] =
+        useState("latest");
+
+    const [notification, setNotification] =
+        useState(null);
+
+    const [
+        wishlistLoadingId,
+        setWishlistLoadingId
+    ] = useState(null);
+
+
+    // =========================
+    // URL PARAMETERS
+    // =========================
+
+    const [searchParams] =
+        useSearchParams();
+
 
     const categoryFromUrl =
         searchParams.get("category");
 
 
+    const searchFromUrl =
+        searchParams.get("search");
+
+
     // =========================
-    // CHECK CURRENT USER
+    // CURRENT USER
     // =========================
 
     const user = JSON.parse(
         localStorage.getItem("user")
     );
 
-    const isBuyer = user?.role === "buyer";
+
+    const token =
+        localStorage.getItem("token");
+
+
+    const isBuyer =
+        user?.role === "buyer";
 
 
     // =========================
-    // GET PRODUCTS FROM BACKEND
+    // AUTO HIDE NOTIFICATION
     // =========================
 
     useEffect(() => {
 
-        const fetchProducts = async () => {
+        if (!notification) {
+            return;
+        }
+
+
+        const timer =
+            setTimeout(() => {
+
+                setNotification(null);
+
+            }, 2000);
+
+
+        return () =>
+            clearTimeout(timer);
+
+    }, [notification]);
+
+
+    // =========================
+    // GET PRODUCTS
+    // =========================
+
+    useEffect(() => {
+
+        const fetchProducts =
+            async () => {
 
             try {
 
                 setLoading(true);
+
                 setError("");
 
-                const response = await fetch(
-                    "http://localhost:5000/api/products"
-                );
 
-                const data = await response.json();
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/products"
+                    );
+
+
+                const data =
+                    await response.json();
+
 
                 if (!response.ok) {
+
                     throw new Error(
                         data.message ||
                         "Failed to load products"
                     );
+
                 }
+
 
                 setProducts(
                     data.products || []
                 );
+
 
             } catch (error) {
 
@@ -76,9 +172,11 @@ export default function Products() {
                     error
                 );
 
+
                 setError(
                     "Unable to load products."
                 );
+
 
             } finally {
 
@@ -88,7 +186,61 @@ export default function Products() {
 
         };
 
+
         fetchProducts();
+
+    }, []);
+
+
+    // =========================
+    // GET CATEGORIES
+    // =========================
+
+    useEffect(() => {
+
+        const fetchCategories =
+            async () => {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/categories"
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load categories."
+                    );
+
+                }
+
+
+                setCategories(
+                    data.categories || []
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Category fetch error:",
+                    error
+                );
+
+            }
+
+        };
+
+
+        fetchCategories();
 
     }, []);
 
@@ -115,78 +267,94 @@ export default function Products() {
 
 
     // =========================
-    // CATEGORY FILTER
+    // SEARCH FROM URL
     // =========================
 
-    const handleCategoryChange = (categoryName) => {
+    useEffect(() => {
 
-        setSelectedCategories((prevCategories) => {
+        if (searchFromUrl) {
 
-            if (
-                prevCategories.includes(categoryName)
-            ) {
+            setSearchTerm(
+                searchFromUrl
+            );
 
-                return prevCategories.filter(
-                    (category) =>
-                        category !== categoryName
-                );
+        } else {
+
+            setSearchTerm("");
+
+        }
+
+    }, [searchFromUrl]);
+
+
+    // =========================
+    // CATEGORY FILTER CHANGE
+    // =========================
+
+    const handleCategoryChange =
+        (categoryName) => {
+
+        setSelectedCategories(
+            (previousCategories) => {
+
+                if (
+                    previousCategories.includes(
+                        categoryName
+                    )
+                ) {
+
+                    return previousCategories.filter(
+                        (category) =>
+                            category !== categoryName
+                    );
+
+                }
+
+
+                return [
+                    ...previousCategories,
+                    categoryName
+                ];
 
             }
-
-            return [
-                ...prevCategories,
-                categoryName
-            ];
-
-        });
+        );
 
     };
 
 
     // =========================
-    // CONDITION FILTER
+    // CONDITION FILTER CHANGE
     // =========================
 
-    const handleConditionChange = (conditionName) => {
+    const handleConditionChange =
+        (conditionName) => {
 
-        setSelectedConditions((prevConditions) => {
+        setSelectedConditions(
+            (previousConditions) => {
 
-            if (
-                prevConditions.includes(conditionName)
-            ) {
+                if (
+                    previousConditions.includes(
+                        conditionName
+                    )
+                ) {
 
-                return prevConditions.filter(
-                    (condition) =>
-                        condition !== conditionName
-                );
+                    return previousConditions.filter(
+                        (condition) =>
+                            condition !== conditionName
+                    );
+
+                }
+
+
+                return [
+                    ...previousConditions,
+                    conditionName
+                ];
 
             }
-
-            return [
-                ...prevConditions,
-                conditionName
-            ];
-
-        });
+        );
 
     };
-
-
-    // =========================
-    // AVAILABLE CATEGORIES
-    // =========================
-
-    const availableCategories = [
-        ...new Set(
-            products
-                .map(
-                    (product) =>
-                        product.category_id
-                            ?.category_name
-                )
-                .filter(Boolean)
-        )
-    ];
 
 
     // =========================
@@ -194,19 +362,49 @@ export default function Products() {
     // =========================
 
     const filteredProducts =
-        products.filter((product) => {
+        products.filter(
+            (product) => {
+
+            // SEARCH
 
             const matchesSearch =
                 product.product_name
                     ?.toLowerCase()
                     .includes(
-                        searchTerm.toLowerCase()
+                        searchTerm
+                            .toLowerCase()
                     );
 
 
-            const productCategory =
-                product.category_id
-                    ?.category_name;
+            // CATEGORY
+
+            let productCategory = "";
+
+
+            if (
+                product.category_id &&
+                typeof product.category_id === "object"
+            ) {
+
+                productCategory =
+                    product.category_id
+                        ?.category_name || "";
+
+            } else {
+
+                const matchingCategory =
+                    categories.find(
+                        (category) =>
+                            category._id ===
+                            product.category_id
+                    );
+
+
+                productCategory =
+                    matchingCategory
+                        ?.category_name || "";
+
+            }
 
 
             const matchesCategory =
@@ -215,6 +413,8 @@ export default function Products() {
                     productCategory
                 );
 
+
+            // CONDITION
 
             const matchesCondition =
                 selectedConditions.length === 0 ||
@@ -237,44 +437,188 @@ export default function Products() {
     // =========================
 
     const sortedProducts =
-        [...filteredProducts].sort((a, b) => {
+        [...filteredProducts].sort(
+            (a, b) => {
 
-            if (sortOption === "price-low") {
-                return a.price - b.price;
-            }
-
-            if (sortOption === "price-high") {
-                return b.price - a.price;
-            }
-
-            if (sortOption === "latest") {
+            if (
+                sortOption === "price-low"
+            ) {
 
                 return (
-                    new Date(b.created_at) -
-                    new Date(a.created_at)
+                    Number(a.price) -
+                    Number(b.price)
                 );
 
             }
+
+
+            if (
+                sortOption === "price-high"
+            ) {
+
+                return (
+                    Number(b.price) -
+                    Number(a.price)
+                );
+
+            }
+
+
+            if (
+                sortOption === "latest"
+            ) {
+
+                return (
+                    new Date(
+                        b.created_at ||
+                        b.createdAt ||
+                        0
+                    ) -
+                    new Date(
+                        a.created_at ||
+                        a.createdAt ||
+                        0
+                    )
+                );
+
+            }
+
 
             return 0;
 
         });
 
 
+    // =========================
+    // ADD TO WISHLIST
+    // =========================
+
+    const handleAddToWishlist =
+        async (productId) => {
+
+        if (!token || !user) {
+
+            setNotification({
+                type: "error",
+                message:
+                    "Please login as a buyer to use the wishlist."
+            });
+
+            return;
+        }
+
+
+        if (!isBuyer) {
+
+            setNotification({
+                type: "error",
+                message:
+                    "Only buyers can use the wishlist."
+            });
+
+            return;
+        }
+
+
+        try {
+
+            setWishlistLoadingId(
+                productId
+            );
+
+
+            const response =
+                await fetch(
+                    "http://localhost:5000/api/wishlist",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+                            product_id:
+                                productId
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                response.status === 409
+            ) {
+
+                setNotification({
+                    type: "error",
+                    message:
+                        "This product is already in your wishlist."
+                });
+
+                return;
+            }
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to add product to wishlist."
+                );
+
+            }
+
+
+            setNotification({
+                type: "success",
+                message:
+                    "Product added to wishlist."
+            });
+
+
+        } catch (error) {
+
+            setNotification({
+                type: "error",
+                message:
+                    error.message ||
+                    "Failed to add product to wishlist."
+            });
+
+
+        } finally {
+
+            setWishlistLoadingId(null);
+
+        }
+
+    };
+
+
     return (
+
         <>
 
             {/* =========================
                 NAVBAR
-
-                Public user -> Navbar
-                Buyer -> BuyerNavbar
             ========================= */}
 
             {isBuyer ? (
+
                 <BuyerNavbar />
+
             ) : (
+
                 <Navbar />
+
             )}
 
 
@@ -287,9 +631,7 @@ export default function Products() {
                 <main className="products-container">
 
 
-                    {/* =========================
-                        HEADER
-                    ========================= */}
+                    {/* HEADER */}
 
                     <div className="products-header">
 
@@ -300,8 +642,8 @@ export default function Products() {
                             </h1>
 
                             <p>
-                                Discover products from students
-                                around your university.
+                                Discover products from
+                                students around your university.
                             </p>
 
                         </div>
@@ -315,13 +657,14 @@ export default function Products() {
                                 🔍
                             </span>
 
+
                             <input
                                 type="text"
                                 placeholder="Search products..."
                                 value={searchTerm}
-                                onChange={(e) =>
+                                onChange={(event) =>
                                     setSearchTerm(
-                                        e.target.value
+                                        event.target.value
                                     )
                                 }
                             />
@@ -357,32 +700,58 @@ export default function Products() {
                                     Category
                                 </h3>
 
-                                {availableCategories.map(
-                                    (categoryName) => (
+
+                                {categories.length === 0 ? (
+
+                                    <p className="filter-empty">
+                                        No categories available.
+                                    </p>
+
+                                ) : (
+
+                                    categories.map(
+                                        (category) => (
 
                                         <label
-                                            key={categoryName}
+                                            key={
+                                                category._id
+                                            }
                                         >
 
                                             <input
                                                 type="checkbox"
                                                 checked={
                                                     selectedCategories.includes(
-                                                        categoryName
+                                                        category.category_name
                                                     )
                                                 }
                                                 onChange={() =>
                                                     handleCategoryChange(
-                                                        categoryName
+                                                        category.category_name
                                                     )
                                                 }
                                             />
 
-                                            {categoryName}
+
+                                            <span>
+
+                                                {
+                                                    category.icon ||
+                                                    "🛍️"
+                                                }
+
+                                                {" "}
+
+                                                {
+                                                    category.category_name
+                                                }
+
+                                            </span>
 
                                         </label>
 
-                                    )
+                                    ))
+
                                 )}
 
                             </div>
@@ -458,19 +827,22 @@ export default function Products() {
 
                                     {sortedProducts.length} product
 
-                                    {sortedProducts.length !== 1
-                                        ? "s"
-                                        : ""
-                                    } found
+                                    {
+                                        sortedProducts.length !== 1
+                                            ? "s"
+                                            : ""
+                                    }
+
+                                    {" "}found
 
                                 </p>
 
 
                                 <select
                                     value={sortOption}
-                                    onChange={(e) =>
+                                    onChange={(event) =>
                                         setSortOption(
-                                            e.target.value
+                                            event.target.value
                                         )
                                     }
                                 >
@@ -492,9 +864,7 @@ export default function Products() {
                             </div>
 
 
-                            {/* =========================
-                                LOADING
-                            ========================= */}
+                            {/* LOADING */}
 
                             {loading && (
 
@@ -509,11 +879,10 @@ export default function Products() {
                             )}
 
 
-                            {/* =========================
-                                ERROR
-                            ========================= */}
+                            {/* ERROR */}
 
-                            {!loading && error && (
+                            {!loading &&
+                                error && (
 
                                 <div className="no-products">
 
@@ -538,96 +907,127 @@ export default function Products() {
                                 !error &&
                                 sortedProducts.length > 0 && (
 
-                                    <div className="product-grid">
+                                <div className="product-grid">
 
-                                        {sortedProducts.map(
-                                            (product) => (
+                                    {sortedProducts.map(
+                                        (product) => (
 
-                                                <div
-                                                    className="product-card"
-                                                    key={product._id}
+                                        <div
+                                            className="product-card"
+                                            key={product._id}
+                                        >
+
+
+                                            {/* WISHLIST */}
+
+                                            {isBuyer && (
+
+                                                <button
+                                                    type="button"
+                                                    className="product-wishlist-button"
+                                                    title="Add to Wishlist"
+                                                    onClick={() =>
+                                                        handleAddToWishlist(
+                                                            product._id
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        wishlistLoadingId ===
+                                                        product._id
+                                                    }
                                                 >
 
-                                                    {/* PRODUCT IMAGE */}
+                                                    {
+                                                        wishlistLoadingId ===
+                                                        product._id
+                                                            ? "..."
+                                                            : "♡"
+                                                    }
 
-                                                    <div className="product-image">
+                                                </button>
 
-                                                        {product.image ? (
-
-                                                            <img
-                                                                src={
-                                                                    product.image
-                                                                }
-                                                                alt={
-                                                                    product.product_name
-                                                                }
-                                                            />
-
-                                                        ) : (
-
-                                                            <span>
-                                                                Product Image
-                                                            </span>
-
-                                                        )}
-
-                                                    </div>
+                                            )}
 
 
-                                                    {/* PRODUCT INFO */}
+                                            {/* PRODUCT IMAGE */}
 
-                                                    <div className="product-info">
+                                            <div className="product-image">
 
-                                                        <h3>
-                                                            {
-                                                                product.product_name
-                                                            }
-                                                        </h3>
+                                                {product.image ? (
 
+                                                    <img
+                                                        src={
+                                                            product.image
+                                                        }
+                                                        alt={
+                                                            product.product_name
+                                                        }
+                                                    />
 
-                                                        <p className="product-price">
+                                                ) : (
 
-                                                            Rs.{" "}
+                                                    <span>
+                                                        Product Image
+                                                    </span>
 
-                                                            {Number(
-                                                                product.price
-                                                            ).toLocaleString()}
+                                                )}
 
-                                                        </p>
-
-
-                                                        <p className="product-condition">
-
-                                                            {product.condition
-                                                                ? product.condition
-                                                                    .charAt(0)
-                                                                    .toUpperCase() +
-                                                                  product.condition.slice(
-                                                                      1
-                                                                  )
-                                                                : ""
-                                                            }
-
-                                                        </p>
+                                            </div>
 
 
-                                                        <Link
-                                                            to={`/products/${product._id}`}
-                                                            className="product-view-button"
-                                                        >
-                                                            View
-                                                        </Link>
+                                            {/* PRODUCT INFO */}
 
-                                                    </div>
+                                            <div className="product-info">
 
-                                                </div>
+                                                <h3>
+                                                    {
+                                                        product.product_name
+                                                    }
+                                                </h3>
 
-                                            )
-                                        )}
 
-                                    </div>
+                                                <p className="product-price">
 
-                                )}
+                                                    Rs.{" "}
+
+                                                    {Number(
+                                                        product.price
+                                                    ).toLocaleString()}
+
+                                                </p>
+
+
+                                                <p className="product-condition">
+
+                                                    {
+                                                        product.condition
+                                                            ? product.condition
+                                                                .charAt(0)
+                                                                .toUpperCase() +
+                                                            product.condition
+                                                                .slice(1)
+                                                            : ""
+                                                    }
+
+                                                </p>
+
+
+                                                <Link
+                                                    to={`/products/${product._id}`}
+                                                    className="product-view-button"
+                                                >
+                                                    View
+                                                </Link>
+
+                                            </div>
+
+                                        </div>
+
+                                    ))}
+
+                                </div>
+
+                            )}
 
 
                             {/* =========================
@@ -638,20 +1038,20 @@ export default function Products() {
                                 !error &&
                                 sortedProducts.length === 0 && (
 
-                                    <div className="no-products">
+                                <div className="no-products">
 
-                                        <h2>
-                                            No products found
-                                        </h2>
+                                    <h2>
+                                        No products found
+                                    </h2>
 
-                                        <p>
-                                            Try changing your
-                                            search or filters.
-                                        </p>
+                                    <p>
+                                        Try changing your
+                                        search or filters.
+                                    </p>
 
-                                    </div>
+                                </div>
 
-                                )}
+                            )}
 
                         </section>
 
@@ -662,12 +1062,25 @@ export default function Products() {
             </div>
 
 
-            {/* =========================
-                COMMON FOOTER
-            ========================= */}
+            {/* NOTIFICATION */}
+
+            {notification && (
+
+                <Notification
+                    type={
+                        notification.type
+                    }
+                    message={
+                        notification.message
+                    }
+                />
+
+            )}
+
 
             <Footer />
 
         </>
+
     );
 }

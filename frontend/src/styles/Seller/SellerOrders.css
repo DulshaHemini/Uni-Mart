@@ -1,0 +1,432 @@
+.seller-orders-page {
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.seller-orders-container {
+    width: min(
+        1100px,
+        calc(100% - 40px)
+    );
+
+    margin: 0 auto;
+
+    padding: 40px 0 60px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.seller-orders-header {
+    margin-bottom: 28px;
+}
+
+.seller-orders-header h1 {
+    margin-bottom: 7px;
+
+    color: #1E2B60;
+
+    font-size: 32px;
+}
+
+.seller-orders-header p {
+    color: #64748b;
+
+    font-size: 15px;
+}
+
+
+/* =========================
+   STATES
+========================= */
+
+.seller-orders-message,
+.seller-orders-error,
+.seller-orders-empty {
+    padding: 35px;
+
+    background: white;
+
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+
+    text-align: center;
+}
+
+.seller-orders-error {
+    color: #dc2626;
+}
+
+.seller-orders-empty h3 {
+    margin-bottom: 8px;
+
+    color: #1E2B60;
+}
+
+.seller-orders-empty p {
+    color: #64748b;
+}
+
+
+/* =========================
+   ORDER LIST
+========================= */
+
+.seller-orders-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 22px;
+}
+
+
+/* =========================
+   ORDER CARD
+========================= */
+
+.seller-order-card {
+    padding: 24px;
+
+    background: white;
+
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================
+   TOP
+========================= */
+
+.seller-order-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.seller-order-top > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.seller-order-label {
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.seller-order-top strong {
+    color: #1E2B60;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.seller-order-status {
+    padding: 7px 14px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-transform: capitalize;
+}
+
+.seller-order-status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.seller-order-status.paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.seller-order-status.processing {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.seller-order-status.shipped {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+.seller-order-status.completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.seller-order-status.cancelled,
+.seller-order-status.failed {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+
+/* =========================
+   META INFORMATION
+========================= */
+
+.seller-order-meta {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+
+    padding: 22px 0;
+
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.seller-order-meta > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.seller-order-meta span {
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.seller-order-meta strong {
+    color: #111827;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+.seller-order-section {
+    padding-top: 20px;
+}
+
+.seller-order-section + .seller-order-section {
+    margin-top: 20px;
+
+    border-top: 1px solid #E5E7EB;
+}
+
+.seller-order-section h3 {
+    margin-bottom: 14px;
+
+    color: #1E2B60;
+
+    font-size: 17px;
+}
+
+
+/* =========================
+   ITEMS
+========================= */
+
+.seller-order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.seller-order-item:last-child {
+    border-bottom: none;
+}
+
+.seller-order-item > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.seller-order-item > div strong {
+    color: #111827;
+}
+
+.seller-order-item span {
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.seller-order-item > strong {
+    color: #1E2B60;
+}
+
+
+/* =========================
+   SHIPPING
+========================= */
+
+.seller-shipping-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 18px;
+}
+
+.seller-shipping-grid > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.seller-shipping-grid span {
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.seller-shipping-grid strong {
+    color: #111827;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 850px) {
+
+    .seller-order-meta {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .seller-orders-container {
+        width: calc(100% - 24px);
+
+        padding-top: 25px;
+    }
+
+
+    .seller-orders-header h1 {
+        font-size: 26px;
+    }
+
+
+    .seller-order-card {
+        padding: 18px;
+    }
+
+
+    .seller-order-top {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .seller-order-meta,
+    .seller-shipping-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .seller-order-item {
+        align-items: flex-start;
+    }
+
+}
+
+.seller-orders-filter {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 18px;
+}
+
+.seller-orders-filter label {
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.seller-orders-filter select {
+    padding: 9px 12px;
+
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+
+    background: white;
+
+    color: #111827;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.seller-orders-filter select:focus {
+    outline: none;
+
+    border-color: #1E2B60;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(30, 43, 96, 0.08);
+}
+
+
+@media (max-width: 600px) {
+
+    .seller-orders-filter {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+}

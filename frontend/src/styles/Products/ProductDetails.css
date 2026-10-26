@@ -481,3 +481,29 @@
     }
 
 }
+
+.add-wishlist-btn {
+    min-height: 44px;
+    padding: 12px 20px;
+    border: 1px solid #1E2B60;
+    border-radius: 8px;
+    background: white;
+    color: #1E2B60;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-wishlist-btn:hover {
+    background: #f1f5f9;
+}
+
+.add-wishlist-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.wishlist-feedback {
+    margin-top: 10px;
+    color: #1E2B60;
+    font-size: 14px;
+}

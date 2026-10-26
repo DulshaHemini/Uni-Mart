@@ -9,9 +9,9 @@ import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
 import paymentRouter from "./routes/paymentRoutes.js";
-import orderRouter
-    from "./routes/orderRoutes.js";dotenv.config();
+import orderRouter from "./routes/orderRoutes.js";dotenv.config();
 import adminRouter from "./routes/adminRoutes.js";
+import wishlistRouter from "./routes/wishlistRoutes.js";
 
 const app = express();
 
@@ -39,6 +39,7 @@ app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/orders",orderRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/wishlist",wishlistRouter);
 
 
 

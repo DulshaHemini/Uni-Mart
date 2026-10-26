@@ -17,6 +17,8 @@ import Notification from "../Notification.jsx";
 import "../../styles/Products/ProductDetails.css";
 
 
+
+
 export default function ProductDetails() {
 
     const { id } = useParams();
@@ -34,6 +36,8 @@ export default function ProductDetails() {
 
     const [notification, setNotification] =
         useState(null);
+
+    const [addingToWishlist, setAddingToWishlist] = useState(false);
 
 
     // =========================
@@ -282,6 +286,118 @@ export default function ProductDetails() {
         }
 
     };
+
+    // =========================
+// ADD TO WISHLIST
+// =========================
+
+const handleAddToWishlist = async () => {
+
+    if (!token || !user) {
+        navigate("/login");
+        return;
+    }
+
+
+    if (!isBuyer) {
+
+        setNotification({
+            type: "error",
+            message:
+                "Only buyers can add products to the wishlist."
+        });
+
+        return;
+    }
+
+
+    if (!product) {
+        return;
+    }
+
+
+    try {
+
+        setAddingToWishlist(true);
+
+
+        const response = await fetch(
+            "http://localhost:5000/api/wishlist",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    Authorization:
+                        `Bearer ${token}`
+                },
+
+                body: JSON.stringify({
+                    product_id:
+                        product._id
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (response.status === 409) {
+
+            setNotification({
+                type: "error",
+                message:
+                    "This product is already in your wishlist."
+            });
+
+            return;
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to add product to wishlist."
+            );
+
+        }
+
+
+        setNotification({
+            type: "success",
+            message:
+                "Product added to wishlist successfully."
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Add to wishlist error:",
+            error
+        );
+
+
+        setNotification({
+            type: "error",
+            message:
+                error.message ||
+                "Failed to add product to wishlist."
+        });
+
+
+    } finally {
+
+        setAddingToWishlist(false);
+
+    }
+
+};
 
 
     return (
@@ -553,10 +669,21 @@ export default function ProductDetails() {
                                         <button
                                             type="button"
                                             className="wishlist-button"
+                                            onClick={
+                                                handleAddToWishlist
+                                            }
+                                            disabled={
+                                                addingToWishlist
+                                            }
                                         >
-                                            ♡ Add to Wishlist
-                                        </button>
 
+                                            {
+                                                addingToWishlist
+                                                    ? "Adding..."
+                                                    : "♡ Add to Wishlist"
+                                            }
+
+                                        </button>
 
                                         <Link
                                             to="/chat"

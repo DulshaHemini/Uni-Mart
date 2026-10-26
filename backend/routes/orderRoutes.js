@@ -2,7 +2,9 @@ import express from "express";
 
 import {
     createOrder,
-    getOrderByCode
+    getOrderByCode,
+    getMyOrders,
+    getSellerOrders
 } from "../controllers/orderController.js";
 
 import {
@@ -23,7 +25,26 @@ router.post(
 );
 
 
+// GET LOGGED-IN BUYER ORDERS
+// MUST BE BEFORE /:orderCode
+
+router.get(
+    "/my-orders",
+    authMiddleware,
+    getMyOrders
+);
+
+// GET LOGGED-IN SELLER ORDERS
+
+router.get(
+    "/seller-orders",
+    authMiddleware,
+    getSellerOrders
+);
+
+
 // GET ORDER BY CODE
+// KEEP THIS LAST
 
 router.get(
     "/:orderCode",

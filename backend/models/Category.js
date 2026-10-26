@@ -13,6 +13,12 @@ const categorySchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true
+        },
+
+        icon: {
+            type: String,
+            default: "🛍️",
+            trim: true
         }
     }
 );
