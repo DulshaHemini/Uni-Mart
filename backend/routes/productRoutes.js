@@ -1,3 +1,4 @@
+
 import express from "express";
 
 import {
@@ -10,24 +11,20 @@ import {
     getRecentlyPurchasedProducts
 } from "../controllers/productController.js";
 
+import { authMiddleware } from "../middleware/authMiddleware.js";
+
 const productRouter = express.Router();
 
-productRouter.post("/", createProduct);
-
+// Public product browsing
 productRouter.get("/", getProducts);
-
-// Keep this static route BEFORE /:id
-productRouter.get(
-    "/recently-purchased",
-    getRecentlyPurchasedProducts
-);
-
+productRouter.get("/recently-purchased", getRecentlyPurchasedProducts);
 productRouter.get("/seller/:sellerId", getProductsBySeller);
-
-productRouter.put("/:id", updateProduct);
-
-productRouter.delete("/:id", deleteProduct);
-
 productRouter.get("/:id", getProductById);
+
+// Only authenticated users can attempt product modifications.
+// Controller checks that the user is a seller and owns the product.
+productRouter.post("/", authMiddleware, createProduct);
+productRouter.put("/:id", authMiddleware, updateProduct);
+productRouter.delete("/:id", authMiddleware, deleteProduct);
 
 export default productRouter;
