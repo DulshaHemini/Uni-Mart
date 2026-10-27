@@ -1,6 +1,14 @@
-git rm -r --cached .gitignore
-git rm -r --cached .env
-git rm -r --cached .package-lock.json
-git rm -r --cached .package.json
-git rm -r --cached .testPayHereSignature.js
-git rm -r --cached .seedTestData.js
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+npm-debug.log*
