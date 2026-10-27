@@ -126,7 +126,7 @@ export default function Contact() {
 
                     <div className="contact-form-card">
                         <h2>Send a Message</h2>
-                        ,<br />
+                        <br />
                         <p className="contact-form-description">
                             Fields marked with * are required.
                         </p>
