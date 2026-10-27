@@ -200,7 +200,7 @@ export default function Register() {
 
                 setTimeout(() => {
                     setNotification(null);
-                }, 500);
+                }, 250);
 
             } else {
 

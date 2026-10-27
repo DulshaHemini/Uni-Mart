@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -12,29 +13,30 @@ const API_URL = "http://localhost:5000/api";
 export default function BuyerHome() {
     const navigate = useNavigate();
 
-    const user = JSON.parse(
-        localStorage.getItem("user") || "null"
-    );
-
+    const user = JSON.parse(localStorage.getItem("user") || "null");
     const token = localStorage.getItem("token");
 
     const [searchTerm, setSearchTerm] = useState("");
 
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
+
     const [categoriesLoading, setCategoriesLoading] = useState(true);
     const [productsLoading, setProductsLoading] = useState(true);
     const [productsError, setProductsError] = useState("");
+    const [categoriesError, setCategoriesError] = useState("");
 
     const [cartCount, setCartCount] = useState(0);
     const [orderCount, setOrderCount] = useState(0);
     const [wishlistCount, setWishlistCount] = useState(0);
 
     const [activityLoading, setActivityLoading] = useState(true);
+    const [activityError, setActivityError] = useState("");
+
     const [busyProductId, setBusyProductId] = useState(null);
     const [feedback, setFeedback] = useState("");
 
-    // Load real products for the recommendations section.
+    // Load active products for recommendations.
     useEffect(() => {
         let active = true;
 
@@ -52,10 +54,22 @@ export default function BuyerHome() {
                     );
                 }
 
+                const productList = Array.isArray(data)
+                    ? data
+                    : data.products;
+
+                if (!Array.isArray(productList)) {
+                    throw new Error(
+                        "Unexpected products response from the server."
+                    );
+                }
+
                 if (active) {
-                    setProducts((data.products || []).slice(0, 4));
+                    setProducts(productList.slice(0, 4));
                 }
             } catch (error) {
+                console.error("Failed to load products:", error);
+
                 if (active) {
                     setProductsError(
                         error.message || "Unable to load products."
@@ -75,7 +89,61 @@ export default function BuyerHome() {
         };
     }, []);
 
-    // Load activity counts from the existing authenticated APIs.
+    // Load categories.
+    useEffect(() => {
+        let active = true;
+
+        async function loadCategories() {
+            try {
+                setCategoriesLoading(true);
+                setCategoriesError("");
+
+                const response = await fetch(`${API_URL}/categories`);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Failed to load categories."
+                    );
+                }
+
+                const categoryList = Array.isArray(data)
+                    ? data
+                    : data.categories;
+
+                if (!Array.isArray(categoryList)) {
+                    throw new Error(
+                        "Unexpected categories response from the server."
+                    );
+                }
+
+                if (active) {
+                    setCategories(categoryList);
+                }
+            } catch (error) {
+                console.error("Failed to load categories:", error);
+
+                if (active) {
+                    setCategories([]);
+                    setCategoriesError(
+                        error.message || "Failed to load categories."
+                    );
+                }
+            } finally {
+                if (active) {
+                    setCategoriesLoading(false);
+                }
+            }
+        }
+
+        loadCategories();
+
+        return () => {
+            active = false;
+        };
+    }, []);
+
+    // Load buyer activity counts.
     useEffect(() => {
         let active = true;
 
@@ -84,56 +152,98 @@ export default function BuyerHome() {
                 setCartCount(0);
                 setOrderCount(0);
                 setWishlistCount(0);
+                setActivityError("");
                 setActivityLoading(false);
                 return;
             }
 
             setActivityLoading(true);
+            setActivityError("");
 
             const headers = {
                 Authorization: `Bearer ${token}`
             };
 
-            const loadCart = async () => {
-                const response = await fetch(`${API_URL}/cart`, {
-                    headers
-                });
-                const data = await response.json();
+            async function fetchJSON(url, options = {}) {
+                const response = await fetch(url, options);
 
-                if (!response.ok) {
-                    throw new Error(data.message || "Unable to load cart.");
-                }
-
-                return Number(data.item_count || 0);
-            };
-
-            const loadOrders = async () => {
-                const response = await fetch(
-                    `${API_URL}/orders/my-orders`,
-                    { headers }
-                );
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || "Unable to load orders.");
-                }
-
-                return (data.orders || []).length;
-            };
-
-            const loadWishlist = async () => {
-                const response = await fetch(`${API_URL}/wishlist`, {
-                    headers
-                });
-                const data = await response.json();
+                const data = await response.json().catch(() => ({}));
 
                 if (!response.ok) {
                     throw new Error(
-                        data.message || "Unable to load wishlist."
+                        data.message ||
+                        `Request failed (${response.status}).`
                     );
                 }
 
-                return (data.wishlist || []).length;
+                return data;
+            }
+
+            const loadCart = async () => {
+                const data = await fetchJSON(`${API_URL}/cart`, {
+                    headers
+                });
+
+                if (typeof data.item_count === "number") {
+                    return data.item_count;
+                }
+
+                if (Array.isArray(data.items)) {
+                    return data.items.reduce(
+                        (total, item) =>
+                            total + Number(item.quantity || 1),
+                        0
+                    );
+                }
+
+                if (Array.isArray(data.cart)) {
+                    return data.cart.reduce(
+                        (total, item) =>
+                            total + Number(item.quantity || 1),
+                        0
+                    );
+                }
+
+                throw new Error(
+                    "Cart API response does not contain item_count, items, or cart."
+                );
+            };
+
+            const loadOrders = async () => {
+                const data = await fetchJSON(
+                    `${API_URL}/orders/my-orders`,
+                    { headers }
+                );
+
+                const orders = Array.isArray(data)
+                    ? data
+                    : data.orders;
+
+                if (!Array.isArray(orders)) {
+                    throw new Error(
+                        "Unexpected orders response from the server."
+                    );
+                }
+
+                return orders.length;
+            };
+
+            const loadWishlist = async () => {
+                const data = await fetchJSON(`${API_URL}/wishlist`, {
+                    headers
+                });
+
+                const wishlist = Array.isArray(data)
+                    ? data
+                    : data.wishlist;
+
+                if (!Array.isArray(wishlist)) {
+                    throw new Error(
+                        "Unexpected wishlist response from the server."
+                    );
+                }
+
+                return wishlist.length;
             };
 
             const results = await Promise.allSettled([
@@ -142,53 +252,71 @@ export default function BuyerHome() {
                 loadWishlist()
             ]);
 
-            if (active) {
-                if (results[0].status === "fulfilled") {
-                    setCartCount(results[0].value);
-                }
-
-                if (results[1].status === "fulfilled") {
-                    setOrderCount(results[1].value);
-                }
-
-                if (results[2].status === "fulfilled") {
-                    setWishlistCount(results[2].value);
-                }
-
-                const failed = results.some(
-                    (result) => result.status === "rejected"
-                );
-
-                if (failed) {
-                    console.error(
-                        "Some Buyer Home activity counts could not be loaded.",
-                        results
-                    );
-                }
-
-                setActivityLoading(false);
+            if (!active) {
+                return;
             }
+
+            const errors = [];
+
+            if (results[0].status === "fulfilled") {
+                setCartCount(results[0].value);
+            } else {
+                errors.push(`Cart: ${results[0].reason.message}`);
+                console.error("Cart count failed:", results[0].reason);
+            }
+
+            if (results[1].status === "fulfilled") {
+                setOrderCount(results[1].value);
+            } else {
+                errors.push(`Orders: ${results[1].reason.message}`);
+                console.error("Order count failed:", results[1].reason);
+            }
+
+            if (results[2].status === "fulfilled") {
+                setWishlistCount(results[2].value);
+            } else {
+                errors.push(`Wishlist: ${results[2].reason.message}`);
+                console.error("Wishlist count failed:", results[2].reason);
+            }
+
+            if (errors.length > 0) {
+                setActivityError(errors.join(" "));
+            }
+
+            setActivityLoading(false);
         }
 
         loadActivity();
 
-        // Refresh the cart count when another page changes the cart.
         const handleCartUpdated = () => {
             loadActivity();
         };
 
+        const handleWishlistUpdated = () => {
+            loadActivity();
+        };
+
+        const handleOrdersUpdated = () => {
+            loadActivity();
+        };
+
         window.addEventListener("cartUpdated", handleCartUpdated);
+        window.addEventListener("wishlistUpdated", handleWishlistUpdated);
+        window.addEventListener("ordersUpdated", handleOrdersUpdated);
 
         return () => {
             active = false;
+
+            window.removeEventListener("cartUpdated", handleCartUpdated);
             window.removeEventListener(
-                "cartUpdated",
-                handleCartUpdated
+                "wishlistUpdated",
+                handleWishlistUpdated
             );
+            window.removeEventListener("ordersUpdated", handleOrdersUpdated);
         };
     }, [token, user?.role]);
 
-    // Search uses the existing Products page and query parameter.
+    // Search products.
     const handleSearch = (event) => {
         event.preventDefault();
 
@@ -201,41 +329,7 @@ export default function BuyerHome() {
         );
     };
 
-    // Load categories from the backend.
-useEffect(() => {
-    let active = true;
-
-    async function loadCategories() {
-        try {
-            const response = await fetch(`${API_URL}/categories`);
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    data.message || "Failed to load categories."
-                );
-            }
-
-            if (active) {
-                setCategories(data.categories || []);
-            }
-        } catch (error) {
-            console.error("Failed to load categories:", error);
-        } finally {
-            if (active) {
-                setCategoriesLoading(false);
-            }
-        }
-    }
-
-    loadCategories();
-
-    return () => {
-        active = false;
-    };
-}, []);
-
-    // Add a product using the existing cart API.
+    // Add a product to the cart.
     const handleAddToCart = async (product) => {
         if (!token || !user) {
             navigate("/login");
@@ -263,7 +357,7 @@ useEffect(() => {
                 })
             });
 
-            const data = await response.json();
+            const data = await response.json().catch(() => ({}));
 
             if (!response.ok) {
                 throw new Error(
@@ -272,15 +366,18 @@ useEffect(() => {
             }
 
             setFeedback(`${product.product_name} added to your cart.`);
+
             window.dispatchEvent(new Event("cartUpdated"));
         } catch (error) {
-            setFeedback(error.message || "Unable to add product to cart.");
+            setFeedback(
+                error.message || "Unable to add product to cart."
+            );
         } finally {
             setBusyProductId(null);
         }
     };
 
-    // Save a product using the existing wishlist API.
+    // Add a product to the wishlist.
     const handleAddToWishlist = async (product) => {
         if (!token || !user) {
             navigate("/login");
@@ -307,7 +404,7 @@ useEffect(() => {
                 })
             });
 
-            const data = await response.json();
+            const data = await response.json().catch(() => ({}));
 
             if (response.status === 409) {
                 setFeedback("This product is already in your wishlist.");
@@ -321,9 +418,16 @@ useEffect(() => {
             }
 
             setWishlistCount((count) => count + 1);
-            setFeedback(`${product.product_name} saved to your wishlist.`);
+
+            setFeedback(
+                `${product.product_name} saved to your wishlist.`
+            );
+
+            window.dispatchEvent(new Event("wishlistUpdated"));
         } catch (error) {
-            setFeedback(error.message || "Unable to save product.");
+            setFeedback(
+                error.message || "Unable to save product."
+            );
         } finally {
             setBusyProductId(null);
         }
@@ -347,7 +451,10 @@ useEffect(() => {
                             Welcome back to your UniMart marketplace.
                         </p>
 
-                        <form className="buyer-search" onSubmit={handleSearch}>
+                        <form
+                            className="buyer-search"
+                            onSubmit={handleSearch}
+                        >
                             <span className="search-icon">🔍</span>
 
                             <input
@@ -370,9 +477,17 @@ useEffect(() => {
                             <h2>Your Activity</h2>
                         </div>
 
+                        {activityError && (
+                            <p role="alert" className="activity-error">
+                                Some activity information could not be loaded.
+                                Check the browser console for details.
+                            </p>
+                        )}
+
                         <div className="activity-grid">
                             <Link to="/cart" className="activity-card">
                                 <div className="activity-icon">🛒</div>
+
                                 <div>
                                     <h3>My Cart</h3>
                                     <p>
@@ -381,11 +496,13 @@ useEffect(() => {
                                             : `${cartCount} Items`}
                                     </p>
                                 </div>
+
                                 <span className="activity-arrow">→</span>
                             </Link>
 
                             <Link to="/orders" className="activity-card">
                                 <div className="activity-icon">📦</div>
+
                                 <div>
                                     <h3>My Orders</h3>
                                     <p>
@@ -394,11 +511,13 @@ useEffect(() => {
                                             : `${orderCount} Orders`}
                                     </p>
                                 </div>
+
                                 <span className="activity-arrow">→</span>
                             </Link>
 
                             <Link to="/wishlist" className="activity-card">
                                 <div className="activity-icon">♡</div>
+
                                 <div>
                                     <h3>Wishlist</h3>
                                     <p>
@@ -407,39 +526,50 @@ useEffect(() => {
                                             : `${wishlistCount} Saved`}
                                     </p>
                                 </div>
+
                                 <span className="activity-arrow">→</span>
                             </Link>
                         </div>
                     </section>
 
-                    
-{/* CATEGORIES */}
-<section className="buyer-section" id="categories">
-    <div className="section-header">
-        <h2>Browse Categories</h2>
-        <Link to="/products">View All →</Link>
-    </div>
+                    {/* CATEGORIES */}
+                    <section
+                        className="buyer-section"
+                        id="categories"
+                    >
+                        <div className="section-header">
+                            <h2>Browse Categories</h2>
+                            <Link to="/products">View All →</Link>
+                        </div>
 
-    {categoriesLoading ? (
-        <p>Loading categories...</p>
-    ) : categories.length === 0 ? (
-        <p>No categories available.</p>
-    ) : (
-        <div className="category-grid">
-            {categories.map((category) => (
-                <Link
-                    key={category._id}
-                    to={`/products?category=${encodeURIComponent(category._id)}`}
-                    className="category-card"
-                >
-                    <span>{category.icon || "🛍️"}</span>
-                    <strong>{category.category_name}</strong>
-                </Link>
-            ))}
-        </div>
-    )}
-</section>
+                        {categoriesLoading ? (
+                            <p role="status">Loading categories...</p>
+                        ) : categoriesError ? (
+                            <p role="alert">{categoriesError}</p>
+                        ) : categories.length === 0 ? (
+                            <p>No categories available.</p>
+                        ) : (
+                            <div className="category-grid">
+                                {categories.map((category) => (
+                                    <Link
+                                        key={category._id}
+                                        to={`/products?category=${encodeURIComponent(
+                                            category._id
+                                        )}`}
+                                        className="category-card"
+                                    >
+                                        <span>
+                                            {category.icon || "🛍️"}
+                                        </span>
 
+                                        <strong>
+                                            {category.category_name}
+                                        </strong>
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </section>
 
                     {/* RECOMMENDED PRODUCTS */}
                     <section className="buyer-section">
