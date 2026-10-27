@@ -44,6 +44,9 @@ import HelpCenter from "./pages/Help/HelpCenter.jsx";
 import Contact from "./pages/Help/Contact.jsx";
 import Privacy from "./pages/Help/Privacy.jsx";
 
+import AdminProfile from "./pages/Admin/AdminProfile.jsx";
+import AdminSettings from "./pages/Admin/AdminSettings.jsx";
+
 import NotFound from "./pages/NotFound.jsx";
 
 
@@ -367,6 +370,24 @@ import Contact from "./pages/Contact/Contact.jsx";
                     element={
                         <ProtectedRoute allowedRoles={["admin"]}>
                             <AdminUsers />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/profile"
+                    element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                            <AdminProfile />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/settings"
+                    element={
+                        <ProtectedRoute allowedRoles={["admin"]}>
+                            <AdminSettings />
                         </ProtectedRoute>
                     }
                 />

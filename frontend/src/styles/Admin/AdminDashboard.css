@@ -670,3 +670,19 @@
     }
 
 }
+
+
+.admin-sidebar-user-button {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.admin-sidebar-user-button:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}

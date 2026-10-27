@@ -1,0 +1,362 @@
+
+.admin-settings-page {
+    min-height: 100vh;
+    background: #f5f7fc;
+    color: #20294a;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.admin-settings-topbar {
+    min-height: 76px;
+    padding: 14px 6%;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.admin-settings-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #1e2b60;
+    text-decoration: none;
+}
+
+.admin-settings-brand-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    background: #1e2b60;
+    color: #ffffff;
+    border-radius: 12px;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.admin-settings-brand strong,
+.admin-settings-brand small {
+    display: block;
+}
+
+.admin-settings-brand strong {
+    font-size: 20px;
+}
+
+.admin-settings-brand small {
+    margin-top: 4px;
+    color: #788099;
+    font-size: 12px;
+}
+
+.admin-settings-back {
+    padding: 10px 16px;
+    border: 1px solid #dfe3ee;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1e2b60;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.admin-settings-back:hover {
+    background: #f0f3fc;
+}
+
+.admin-settings-main {
+    width: min(1100px, 90%);
+    margin: 0 auto;
+    padding: 42px 0 60px;
+}
+
+.admin-settings-heading {
+    margin-bottom: 28px;
+}
+
+.admin-settings-eyebrow {
+    color: #f97316;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.admin-settings-heading h1 {
+    margin: 9px 0;
+    color: #1e2b60;
+    font-size: clamp(28px, 4vw, 36px);
+}
+
+.admin-settings-heading p {
+    margin: 0;
+    color: #747c93;
+    line-height: 1.6;
+}
+
+.admin-settings-layout {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.admin-settings-menu,
+.admin-settings-card {
+    background: #ffffff;
+    border: 1px solid #e7eaf2;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(30, 43, 96, 0.04);
+}
+
+.admin-settings-menu {
+    padding: 20px 14px;
+}
+
+.admin-settings-menu h3 {
+    margin: 0 10px 16px;
+    color: #777f95;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.admin-settings-menu a {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 13px 12px;
+    margin: 5px 0;
+    border-radius: 8px;
+    color: #525b75;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.admin-settings-menu a:hover {
+    background: #f5f6fb;
+}
+
+.admin-settings-menu a.active {
+    background: #fff1e7;
+    color: #d85d08;
+    font-weight: 700;
+}
+
+.admin-settings-card {
+    padding: 30px;
+}
+
+.admin-settings-card-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.admin-settings-lock-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #fff1e7;
+    font-size: 23px;
+}
+
+.admin-settings-card-heading h2 {
+    margin: 2px 0 8px;
+    color: #1e2b60;
+    font-size: 21px;
+}
+
+.admin-settings-card-heading p {
+    margin: 0;
+    color: #777f95;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.admin-settings-field {
+    margin-bottom: 21px;
+}
+
+.admin-settings-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #303a59;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-settings-field input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 14px;
+    border: 1px solid #dce1ec;
+    border-radius: 8px;
+    outline: none;
+    background: #ffffff;
+    color: #20294a;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-settings-field input:focus {
+    border-color: #1e2b60;
+    box-shadow: 0 0 0 3px rgba(30, 43, 96, 0.09);
+}
+
+.admin-settings-field input::placeholder {
+    color: #a2a8b8;
+}
+
+.admin-settings-field small {
+    display: block;
+    margin-top: 7px;
+    color: #858ca0;
+    font-size: 12px;
+}
+
+.admin-settings-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.admin-settings-save,
+.admin-settings-cancel {
+    min-height: 44px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-settings-save {
+    border: 1px solid #f97316;
+    background: #f97316;
+    color: #ffffff;
+}
+
+.admin-settings-save:hover {
+    background: #e7650c;
+}
+
+.admin-settings-cancel {
+    border: 1px solid #dce1ec;
+    background: #ffffff;
+    color: #424b66;
+}
+
+.admin-settings-cancel:hover {
+    background: #f5f6fa;
+}
+
+.admin-settings-save:disabled,
+.admin-settings-cancel:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.admin-settings-message {
+    margin-bottom: 22px;
+    padding: 13px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.admin-settings-message.success {
+    border: 1px solid #b9e5c7;
+    background: #edf9f0;
+    color: #216b37;
+}
+
+.admin-settings-message.error {
+    border: 1px solid #f1c1c1;
+    background: #fff0f0;
+    color: #a12626;
+}
+
+.admin-settings-security-note {
+    margin-top: 30px;
+    padding: 17px 18px;
+    border-left: 4px solid #f97316;
+    border-radius: 6px;
+    background: #fff8f2;
+}
+
+.admin-settings-security-note strong {
+    color: #7d421b;
+    font-size: 14px;
+}
+
+.admin-settings-security-note p {
+    margin: 7px 0 0;
+    color: #775f50;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+    .admin-settings-topbar {
+        padding: 13px 5%;
+    }
+
+    .admin-settings-main {
+        width: 92%;
+        padding-top: 30px;
+    }
+
+    .admin-settings-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-settings-menu {
+        padding: 15px;
+    }
+
+    .admin-settings-card {
+        padding: 22px 18px;
+    }
+}
+
+@media (max-width: 420px) {
+    .admin-settings-brand strong {
+        font-size: 17px;
+    }
+
+    .admin-settings-brand small {
+        font-size: 11px;
+    }
+
+    .admin-settings-back {
+        padding: 9px 10px;
+        font-size: 12px;
+    }
+
+    .admin-settings-card-heading {
+        gap: 10px;
+    }
+
+    .admin-settings-card-heading h2 {
+        font-size: 18px;
+    }
+
+    .admin-settings-actions {
+        flex-direction: column;
+    }
+
+    .admin-settings-save,
+    .admin-settings-cancel {
+        width: 100%;
+    }
+}

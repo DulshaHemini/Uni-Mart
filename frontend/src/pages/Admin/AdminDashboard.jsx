@@ -1,11 +1,10 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../../styles/Admin/AdminDashboard.css";
 
-
 export default function AdminDashboard() {
-
     const navigate = useNavigate();
 
     const [dashboardData, setDashboardData] = useState(null);
@@ -18,13 +17,9 @@ export default function AdminDashboard() {
         localStorage.getItem("user")
     );
 
-
     useEffect(() => {
-
         const fetchDashboard = async () => {
-
             try {
-
                 const response = await fetch(
                     "http://localhost:5000/api/admin/dashboard",
                     {
@@ -44,57 +39,39 @@ export default function AdminDashboard() {
                 }
 
                 setDashboardData(data);
-
             } catch (error) {
-
                 console.error(error);
-
                 setError(error.message);
-
             } finally {
-
                 setLoading(false);
-
             }
-
         };
 
         fetchDashboard();
-
     }, [token]);
 
-
     const handleLogout = () => {
-
         localStorage.removeItem("token");
         localStorage.removeItem("user");
 
         navigate("/login");
-
     };
 
-
     if (loading) {
-
         return (
             <div className="admin-page-state">
                 Loading dashboard...
             </div>
         );
-
     }
 
-
     if (error) {
-
         return (
             <div className="admin-page-state admin-page-error">
                 {error}
             </div>
         );
-
     }
-
 
     const {
         summary,
@@ -102,20 +79,14 @@ export default function AdminDashboard() {
         lowStockProducts
     } = dashboardData;
 
-
     return (
-
         <div className="admin-dashboard-layout">
 
-
-            {/* ================================
-                SIDEBAR
-            ================================ */}
+            {/* SIDEBAR */}
 
             <aside className="admin-dashboard-sidebar">
 
                 <div className="admin-brand">
-
                     <span className="admin-brand-uni">
                         Uni
                     </span>
@@ -123,9 +94,7 @@ export default function AdminDashboard() {
                     <span className="admin-brand-mart">
                         Mart
                     </span>
-
                 </div>
-
 
                 <div className="admin-menu">
 
@@ -138,10 +107,8 @@ export default function AdminDashboard() {
                         <span className="admin-menu-icon">
                             ▦
                         </span>
-
                         Dashboard
                     </button>
-
 
                     <button
                         className="admin-menu-item"
@@ -152,10 +119,8 @@ export default function AdminDashboard() {
                         <span className="admin-menu-icon">
                             □
                         </span>
-
                         Products
                     </button>
-
 
                     <button
                         className="admin-menu-item"
@@ -166,10 +131,8 @@ export default function AdminDashboard() {
                         <span className="admin-menu-icon">
                             ▤
                         </span>
-
                         Inventory
                     </button>
-
 
                     <button
                         className="admin-menu-item"
@@ -180,10 +143,8 @@ export default function AdminDashboard() {
                         <span className="admin-menu-icon">
                             ≡
                         </span>
-
                         Orders
                     </button>
-
 
                     <button
                         className="admin-menu-item"
@@ -194,28 +155,58 @@ export default function AdminDashboard() {
                         <span className="admin-menu-icon">
                             ♙
                         </span>
-
                         Users
+                    </button>
+
+                    {/* NEW: ADMIN PROFILE */}
+
+                    <button
+                        className="admin-menu-item"
+                        onClick={() =>
+                            navigate("/admin/profile")
+                        }
+                    >
+                        <span className="admin-menu-icon">
+                            👤
+                        </span>
+                        Profile
+                    </button>
+
+                    {/* NEW: ADMIN SETTINGS */}
+
+                    <button
+                        className="admin-menu-item"
+                        onClick={() =>
+                            navigate("/admin/settings")
+                        }
+                    >
+                        <span className="admin-menu-icon">
+                            ⚙
+                        </span>
+                        Settings
                     </button>
 
                 </div>
 
-
                 <div className="admin-sidebar-footer">
 
-                    <div className="admin-sidebar-user">
+                    {/* CLICK ADMIN ACCOUNT TO OPEN PROFILE */}
 
+                    <button
+                        type="button"
+                        className="admin-sidebar-user admin-sidebar-user-button"
+                        onClick={() =>
+                            navigate("/admin/profile")
+                        }
+                        title="Open administrator profile"
+                    >
                         <div className="admin-sidebar-avatar">
-
                             {user?.first_name
                                 ?.charAt(0)
                                 ?.toUpperCase() || "A"}
-
                         </div>
 
-
                         <div>
-
                             <strong>
                                 {user?.first_name || "Admin"}
                             </strong>
@@ -223,11 +214,8 @@ export default function AdminDashboard() {
                             <span>
                                 Administrator
                             </span>
-
                         </div>
-
-                    </div>
-
+                    </button>
 
                     <button
                         className="admin-sidebar-logout"
@@ -240,34 +228,23 @@ export default function AdminDashboard() {
 
             </aside>
 
-
-            {/* ================================
-                MAIN AREA
-            ================================ */}
+            {/* MAIN AREA */}
 
             <main className="admin-dashboard-main">
 
-
-                {/* ================================
-                    TOP HEADER
-                ================================ */}
+                {/* TOP HEADER */}
 
                 <header className="admin-dashboard-header">
 
                     <div>
-
-                        <h1>
-                            Dashboard
-                        </h1>
+                        <h1>Dashboard</h1>
 
                         <p>
                             Welcome back,{" "}
                             {user?.first_name || "Admin"}.
                             Here’s what’s happening with UniMart.
                         </p>
-
                     </div>
-
 
                     <button
                         className="admin-primary-button"
@@ -280,135 +257,89 @@ export default function AdminDashboard() {
 
                 </header>
 
-
-                {/* ================================
-                    SUMMARY CARDS
-                ================================ */}
+                {/* SUMMARY CARDS */}
 
                 <section className="admin-stat-grid">
 
                     <div className="admin-stat-card">
-
                         <div className="admin-stat-top">
-
-                            <span>
-                                Total Products
-                            </span>
+                            <span>Total Products</span>
 
                             <div className="admin-stat-icon">
                                 □
                             </div>
-
                         </div>
 
-                        <h2>
-                            {summary.totalProducts}
-                        </h2>
+                        <h2>{summary.totalProducts}</h2>
 
                         <p>
                             Products currently in UniMart
                         </p>
-
                     </div>
 
-
                     <div className="admin-stat-card">
-
                         <div className="admin-stat-top">
-
-                            <span>
-                                Total Orders
-                            </span>
+                            <span>Total Orders</span>
 
                             <div className="admin-stat-icon">
                                 ≡
                             </div>
-
                         </div>
 
-                        <h2>
-                            {summary.totalOrders}
-                        </h2>
+                        <h2>{summary.totalOrders}</h2>
 
                         <p>
                             Customer orders recorded
                         </p>
-
                     </div>
 
-
                     <div className="admin-stat-card">
-
                         <div className="admin-stat-top">
-
-                            <span>
-                                Low Stock
-                            </span>
+                            <span>Low Stock</span>
 
                             <div className="admin-stat-icon warning">
                                 !
                             </div>
-
                         </div>
 
-                        <h2>
-                            {summary.lowStock}
-                        </h2>
+                        <h2>{summary.lowStock}</h2>
 
                         <p>
                             Products with stock 5 or below
                         </p>
-
                     </div>
 
-
                     <div className="admin-stat-card">
-
                         <div className="admin-stat-top">
-
-                            <span>
-                                Total Users
-                            </span>
+                            <span>Total Users</span>
 
                             <div className="admin-stat-icon">
                                 ♙
                             </div>
-
                         </div>
 
-                        <h2>
-                            {summary.totalUsers}
-                        </h2>
+                        <h2>{summary.totalUsers}</h2>
 
                         <p>
                             Registered UniMart users
                         </p>
-
                     </div>
 
                 </section>
 
-
-                {/* ================================
-                    RECENT ORDERS
-                ================================ */}
+                {/* RECENT ORDERS */}
 
                 <section className="admin-dashboard-section">
 
                     <div className="admin-section-header">
 
                         <div>
-
-                            <h2>
-                                Recent Orders
-                            </h2>
+                            <h2>Recent Orders</h2>
 
                             <p>
                                 Latest customer orders
                             </p>
-
                         </div>
-
 
                         <button
                             className="admin-text-button"
@@ -421,7 +352,6 @@ export default function AdminDashboard() {
 
                     </div>
 
-
                     <div className="admin-dashboard-table-card">
 
                         <div className="admin-table-scroll">
@@ -429,7 +359,6 @@ export default function AdminDashboard() {
                             <table className="admin-dashboard-table">
 
                                 <thead>
-
                                     <tr>
                                         <th>Order ID</th>
                                         <th>Customer</th>
@@ -437,115 +366,76 @@ export default function AdminDashboard() {
                                         <th>Total</th>
                                         <th>Status</th>
                                     </tr>
-
                                 </thead>
 
-
                                 <tbody>
-
                                     {recentOrders.length === 0 ? (
-
                                         <tr>
-
                                             <td
                                                 colSpan="5"
                                                 className="admin-empty-cell"
                                             >
                                                 No orders found.
                                             </td>
-
                                         </tr>
-
                                     ) : (
+                                        recentOrders.map((order) => (
+                                            <tr key={order._id}>
 
-                                        recentOrders.map(
-                                            (order) => (
+                                                <td className="admin-order-code">
+                                                    {order.order_code}
+                                                </td>
 
-                                                <tr key={order._id}>
+                                                <td>
+                                                    <div className="admin-customer-cell">
 
-                                                    <td className="admin-order-code">
-                                                        {order.order_code}
-                                                    </td>
-
-
-                                                    <td>
-
-                                                        <div className="admin-customer-cell">
-
-                                                            <div className="admin-customer-avatar">
-
-                                                                {
-                                                                    order.user_id
-                                                                        ?.first_name
-                                                                        ?.charAt(0)
-                                                                        ?.toUpperCase() || "U"
-                                                                }
-
-                                                            </div>
-
-
-                                                            <div>
-
-                                                                <strong>
-                                                                    {
-                                                                        order.user_id
-                                                                            ? `${order.user_id.first_name} ${order.user_id.last_name}`
-                                                                            : "Unknown User"
-                                                                    }
-                                                                </strong>
-
-                                                                <span>
-                                                                    {
-                                                                        order.user_id
-                                                                            ?.email || ""
-                                                                    }
-                                                                </span>
-
-                                                            </div>
-
+                                                        <div className="admin-customer-avatar">
+                                                            {order.user_id
+                                                                ?.first_name
+                                                                ?.charAt(0)
+                                                                ?.toUpperCase() || "U"}
                                                         </div>
 
-                                                    </td>
+                                                        <div>
+                                                            <strong>
+                                                                {order.user_id
+                                                                    ? `${order.user_id.first_name} ${order.user_id.last_name}`
+                                                                    : "Unknown User"}
+                                                            </strong>
 
+                                                            <span>
+                                                                {order.user_id
+                                                                    ?.email || ""}
+                                                            </span>
+                                                        </div>
 
-                                                    <td>
+                                                    </div>
+                                                </td>
 
-                                                        {
-                                                            new Date(
-                                                                order.created_at
-                                                            ).toLocaleDateString()
-                                                        }
+                                                <td>
+                                                    {new Date(
+                                                        order.created_at
+                                                    ).toLocaleDateString()}
+                                                </td>
 
-                                                    </td>
+                                                <td>
+                                                    Rs.{" "}
+                                                    {Number(
+                                                        order.total_amount
+                                                    ).toLocaleString()}
+                                                </td>
 
+                                                <td>
+                                                    <span
+                                                        className={`admin-status-badge admin-status-${order.order_status}`}
+                                                    >
+                                                        {order.order_status}
+                                                    </span>
+                                                </td>
 
-                                                    <td>
-                                                        Rs.{" "}
-                                                        {
-                                                            Number(
-                                                                order.total_amount
-                                                            ).toLocaleString()
-                                                        }
-                                                    </td>
-
-
-                                                    <td>
-
-                                                        <span
-                                                            className={`admin-status-badge admin-status-${order.order_status}`}
-                                                        >
-                                                            {order.order_status}
-                                                        </span>
-
-                                                    </td>
-
-                                                </tr>
-
-                                            )
-                                        )
-
+                                            </tr>
+                                        ))
                                     )}
-
                                 </tbody>
 
                             </table>
@@ -556,32 +446,23 @@ export default function AdminDashboard() {
 
                 </section>
 
-
-                {/* ================================
-                    LOWER GRID
-                ================================ */}
+                {/* LOWER GRID */}
 
                 <section className="admin-lower-grid">
 
-
-                    {/* LOW STOCK */}
+                    {/* LOW STOCK PRODUCTS */}
 
                     <div className="admin-dashboard-section">
 
                         <div className="admin-section-header">
 
                             <div>
-
-                                <h2>
-                                    Low Stock Products
-                                </h2>
+                                <h2>Low Stock Products</h2>
 
                                 <p>
                                     Products that need attention
                                 </p>
-
                             </div>
-
 
                             <button
                                 className="admin-text-button"
@@ -594,57 +475,42 @@ export default function AdminDashboard() {
 
                         </div>
 
-
                         <div className="admin-low-stock-list">
 
                             {lowStockProducts.length === 0 ? (
-
                                 <div className="admin-empty-box">
                                     No low stock products.
                                 </div>
-
                             ) : (
+                                lowStockProducts.map((product) => (
+                                    <div
+                                        className="admin-low-stock-item"
+                                        key={product._id}
+                                    >
 
-                                lowStockProducts.map(
-                                    (product) => (
+                                        <div>
+                                            <strong>
+                                                {product.product_name}
+                                            </strong>
 
-                                        <div
-                                            className="admin-low-stock-item"
-                                            key={product._id}
-                                        >
-
-                                            <div>
-
-                                                <strong>
-                                                    {product.product_name}
-                                                </strong>
-
-                                                <span>
-                                                    {
-                                                        product.category_id
-                                                            ?.category_name ||
-                                                        "No Category"
-                                                    }
-                                                </span>
-
-                                            </div>
-
-
-                                            <div className="admin-stock-pill">
-                                                {product.stock_quantity} left
-                                            </div>
-
+                                            <span>
+                                                {product.category_id
+                                                    ?.category_name ||
+                                                    "No Category"}
+                                            </span>
                                         </div>
 
-                                    )
-                                )
+                                        <div className="admin-stock-pill">
+                                            {product.stock_quantity} left
+                                        </div>
 
+                                    </div>
+                                ))
                             )}
 
                         </div>
 
                     </div>
-
 
                     {/* QUICK ACTIONS */}
 
@@ -653,19 +519,14 @@ export default function AdminDashboard() {
                         <div className="admin-section-header">
 
                             <div>
-
-                                <h2>
-                                    Quick Actions
-                                </h2>
+                                <h2>Quick Actions</h2>
 
                                 <p>
                                     Manage UniMart quickly
                                 </p>
-
                             </div>
 
                         </div>
-
 
                         <div className="admin-action-grid">
 
@@ -679,7 +540,6 @@ export default function AdminDashboard() {
                                 </span>
 
                                 <div>
-
                                     <strong>
                                         Manage Products
                                     </strong>
@@ -687,10 +547,8 @@ export default function AdminDashboard() {
                                     <small>
                                         Add, edit or deactivate products
                                     </small>
-
                                 </div>
                             </button>
-
 
                             <button
                                 onClick={() =>
@@ -702,7 +560,6 @@ export default function AdminDashboard() {
                                 </span>
 
                                 <div>
-
                                     <strong>
                                         Manage Orders
                                     </strong>
@@ -710,10 +567,8 @@ export default function AdminDashboard() {
                                     <small>
                                         View and update customer orders
                                     </small>
-
                                 </div>
                             </button>
-
 
                             <button
                                 onClick={() =>
@@ -725,18 +580,13 @@ export default function AdminDashboard() {
                                 </span>
 
                                 <div>
-
-                                    <strong>
-                                        Inventory
-                                    </strong>
+                                    <strong>Inventory</strong>
 
                                     <small>
                                         Monitor product stock levels
                                     </small>
-
                                 </div>
                             </button>
-
 
                             <button
                                 onClick={() =>
@@ -748,15 +598,51 @@ export default function AdminDashboard() {
                                 </span>
 
                                 <div>
-
-                                    <strong>
-                                        Manage Users
-                                    </strong>
+                                    <strong>Manage Users</strong>
 
                                     <small>
                                         View registered users
                                     </small>
+                                </div>
+                            </button>
 
+                            {/* NEW: PROFILE QUICK ACTION */}
+
+                            <button
+                                onClick={() =>
+                                    navigate("/admin/profile")
+                                }
+                            >
+                                <span className="admin-action-icon">
+                                    👤
+                                </span>
+
+                                <div>
+                                    <strong>Admin Profile</strong>
+
+                                    <small>
+                                        View and update account details
+                                    </small>
+                                </div>
+                            </button>
+
+                            {/* NEW: SETTINGS QUICK ACTION */}
+
+                            <button
+                                onClick={() =>
+                                    navigate("/admin/settings")
+                                }
+                            >
+                                <span className="admin-action-icon">
+                                    ⚙
+                                </span>
+
+                                <div>
+                                    <strong>Account Settings</strong>
+
+                                    <small>
+                                        Change your account password
+                                    </small>
                                 </div>
                             </button>
 
@@ -769,7 +655,5 @@ export default function AdminDashboard() {
             </main>
 
         </div>
-
     );
-
 }
